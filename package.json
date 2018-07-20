@@ -8,11 +8,22 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build:ts": "tsc"
+    "build:ts": "tsc",
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "\\.ts$": "ts-jest"
+    },
+    "testRegex": "tests/.*\\.test\\.ts$",
+    "moduleFileExtensions": [ "ts", "js" ],
+    "moduleDirectories": [ "./" ]
   },
   "dependencies": {},
   "devDependencies": {
     "flowgen": "^1.2.2",
+    "jest": "^23.4.1",
+    "ts-jest": "^23.0.1",
     "typescript": "^2.9.2"
   }
 }
