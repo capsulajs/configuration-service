@@ -4,4 +4,4 @@ export {
   LocalStorageResponse
 } from './types';
 
-export { LocalStorageProvider } from './Provider';
+export { LocalStorageProvider } from './LocalStorageProvider';

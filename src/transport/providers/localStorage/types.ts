@@ -1,4 +1,4 @@
-export type LocalStorageMethod = 'get' | 'set' | 'list';
+export type LocalStorageMethod = 'clear' | 'get' | 'set';
 
 export interface LocalStorageRequest<T> {
   method: LocalStorageMethod;

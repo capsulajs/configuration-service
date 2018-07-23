@@ -16,11 +16,18 @@
       "\\.ts$": "ts-jest"
     },
     "testRegex": "tests/.*\\.test\\.ts$",
-    "moduleFileExtensions": [ "ts", "js" ],
-    "moduleDirectories": [ "./" ]
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "moduleDirectories": [
+      "./"
+    ]
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/jest": "^23.3.0",
+    "@types/node": "^10.5.2",
     "flowgen": "^1.2.2",
     "jest": "^23.4.1",
     "ts-jest": "^23.0.1",
