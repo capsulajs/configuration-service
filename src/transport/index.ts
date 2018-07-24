@@ -1,2 +1,4 @@
 export { Dispatcher } from './Dispatcher';
-export { LocalStorageProvider } from './providers/localStorage';
+export { DispatcherRequest } from './DispatcherRequest';
+export { DispatcherResponse } from './DispatcherResponse';
+export { LocalStorageProvider } from './providers';

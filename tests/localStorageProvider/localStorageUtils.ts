@@ -31,10 +31,10 @@ interface TestConfig {
 export const buildLocalStorageProvider = (mockData: TestConfig) => {
   mockGlobalLocalStorage();
 
-  const localStorageProvider = new LocalStorageProvider<TestConfig>('testStore');
+  const localStorageProvider = new LocalStorageProvider<TestConfig, TestConfig>('testStore');
 
   localStorageProvider.dispatch({
-    method: 'set',
+    command: 'set',
     payload: mockData
   });
 

@@ -1,2 +1,1 @@
-export { GetRequest } from './GetRequest';
-export { GetResponse } from './GetResponse';
+export { ConfigurationService } from './ConfigurationService';

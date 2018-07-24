@@ -2,7 +2,7 @@ import { Dispatcher } from '../..';
 
 import { LocalStorageRequest, LocalStorageResponse } from '.';
 
-export class LocalStorageProvider<T> implements Dispatcher<LocalStorageRequest<T>, LocalStorageResponse<T>> {
+export class LocalStorageProvider<T, R> implements Dispatcher<T, R> {
 
   private key: string = '';
 
@@ -13,11 +13,11 @@ export class LocalStorageProvider<T> implements Dispatcher<LocalStorageRequest<T
     this.key = key;
   }
 
-  dispatch(request: LocalStorageRequest<T>): Promise<LocalStorageResponse<T>> {
+  dispatch(request: LocalStorageRequest<T>): Promise<LocalStorageResponse<R>> {
     const { key } = this;
-    const { method, payload } = request;
+    const { command, payload } = request;
 
-    switch (method ) {
+    switch (command ) {
       case 'clear':
         localStorage.removeItem(key);
         return Promise.resolve({});
@@ -37,6 +37,9 @@ export class LocalStorageProvider<T> implements Dispatcher<LocalStorageRequest<T
       case 'set':
         localStorage.setItem(key, JSON.stringify(payload));
         return Promise.resolve({});
+
+      default:
+        return Promise.reject(new Error(`Unknown command ${command}`));
     }
   }
 };

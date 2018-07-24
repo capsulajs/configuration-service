@@ -10,7 +10,7 @@ describe('Test suite fro the LocalStorageProvider', () => {
     });
 
     return expect(localStorageProvider.dispatch({
-      method: 'get'
+      command: 'get'
     })).resolves.toEqual({
       numValue: 1,
       stringValue: 'test'
@@ -23,10 +23,10 @@ describe('Test suite fro the LocalStorageProvider', () => {
       stringValue: 'test'
     });
 
-    localStorageProvider.dispatch({ method: 'clear' });
+    localStorageProvider.dispatch({ command: 'clear' });
 
     return expect(localStorageProvider.dispatch({
-      method: 'get'
+      command: 'get'
     })).resolves.toEqual({});
 
   });

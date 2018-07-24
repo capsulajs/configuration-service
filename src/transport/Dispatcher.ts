@@ -1,3 +1,5 @@
+import { DispatcherRequest, DispatcherResponse } from '.';
+
 export interface Dispatcher<T, R> {
-  dispatch(request: T): Promise<R>
-}
+  dispatch(request: DispatcherRequest<T>): Promise<DispatcherResponse<R>>;
+};
