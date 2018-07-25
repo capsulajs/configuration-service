@@ -1,1 +1,0 @@
-export { LocalStorageProvider } from './localStorage';

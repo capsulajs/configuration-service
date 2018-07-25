@@ -1,4 +1,4 @@
-import { LocalStorageProvider } from 'src/transport';
+import { ConfigurationServiceLocalStorage } from 'src/provider/LocalStorage';
 
 type ValueType = string | null;
 
@@ -23,20 +23,14 @@ export class LocalStorage {
 
 export const mockGlobalLocalStorage = () => global.localStorage = new LocalStorage();
 
-interface TestConfig {
-  numValue: number;
-  stringValue: string;
-};
-
-export const buildLocalStorageProvider = (mockData: TestConfig) => {
+export const buildConfigurationServiceLocalStorage = (configKey: string, configValue?: any) => {
   mockGlobalLocalStorage();
 
-  const localStorageProvider = new LocalStorageProvider<TestConfig, TestConfig>('testStore');
+  const configService = new ConfigurationServiceLocalStorage('testConfig');
 
-  localStorageProvider.dispatch({
-    command: 'set',
-    payload: mockData
-  });
+  if (configValue) {
+    configService.set(configKey, configValue);
+  }
 
-  return localStorageProvider;
+  return configService;
 };
