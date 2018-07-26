@@ -1,12 +1,67 @@
-import { buildConfigurationServiceLocalStorage } from './localStorageUtils';
+import { ConfigurationServiceLocalStorage } from 'src/provider/LocalStorage';
+
+import {
+  removeLocalStorage,
+  buildConfigurationServiceLocalStorage
+} from './localStorageUtils';
 
 const configKey = 'testKey';
 
 describe('Test suite fro the LocalStorageProvider', () => {
 
-  it('Check getting a value', () => {
+  beforeEach(removeLocalStorage);
 
-    const configService = buildConfigurationServiceLocalStorage(
+  it('Checks the error when localStorage does not exist', () => {
+    return expect(
+      () => new ConfigurationServiceLocalStorage('testConfig')
+    ).toThrow(new Error('localStorage does not exist'));
+  });
+
+  it('Checks the error Configuration key not found', async () => {
+
+    const configService = await buildConfigurationServiceLocalStorage(configKey);
+
+    return expect(configService.get('aKey')).rejects.toEqual(new Error('Configuration key aKey not found'));
+  });
+
+  it('Checks clearAll without any configuration values', async () => {
+    
+    const configService = await buildConfigurationServiceLocalStorage(configKey);
+
+    return expect(configService.clearAll()).resolves.toBeUndefined();
+  });
+
+  it('Checks clearAll without a configuration values', async () => {
+    
+    const configService = await buildConfigurationServiceLocalStorage(
+      configKey,
+      {
+        numValue: 1,
+        stringValue: 'test'
+      }
+    );
+
+    return expect(configService.clearAll()).resolves.toBeUndefined();
+  });
+
+  it('Checks clearKey removes a configuration key', async () => {
+
+    const configService = await buildConfigurationServiceLocalStorage(
+      configKey,
+      {
+        numValue: 1,
+        stringValue: 'test'
+      }
+    );
+
+    await configService.clearKey(configKey);
+
+    return expect(configService.get(configKey)).rejects.toEqual(new Error(`Configuration key ${configKey} not found`));
+  });
+
+  it('Checks getting a value', async () => {
+
+    const configService = await buildConfigurationServiceLocalStorage(
       configKey,
       {
         numValue: 1,
@@ -20,9 +75,9 @@ describe('Test suite fro the LocalStorageProvider', () => {
     });
   });
 
-  it('Check re-setting a value', () => {
+  it('Checks keys returns list of configuration keys', async () => {
 
-    const configService = buildConfigurationServiceLocalStorage(
+    const configService = await buildConfigurationServiceLocalStorage(
       configKey,
       {
         numValue: 1,
@@ -30,7 +85,25 @@ describe('Test suite fro the LocalStorageProvider', () => {
       }
     );
 
-    configService.set(configKey, {
+    await configService.set(configKey + '1', {
+      numValue: 3,
+      stringValue: 'testX'
+    });
+
+    return expect(configService.keys()).resolves.toEqual([configKey, configKey + '1']);
+  });
+
+  it('Checks re-setting a value', async () => {
+
+    const configService = await buildConfigurationServiceLocalStorage(
+      configKey,
+      {
+        numValue: 1,
+        stringValue: 'test'
+      }
+    );
+
+    await configService.set(configKey, {
       numValue: 3,
       stringValue: 'testX'
     });
@@ -41,17 +114,30 @@ describe('Test suite fro the LocalStorageProvider', () => {
     });
   });
 
-  /*it('Check clear operation ', () => {
-    const localStorageProvider = buildLocalStorageProvider(configKey, {
-      numValue: 1,
-      stringValue: 'test'
+  it('Checks values returns an array of configuration values', async () => {
+
+    const configService = await buildConfigurationServiceLocalStorage(
+      configKey,
+      {
+        numValue: 1,
+        stringValue: 'test'
+      }
+    );
+
+    await configService.set(configKey + 'A', {
+      numValue: 3,
+      stringValue: 'testX'
     });
 
-    localStorageProvider.dispatch({ command: 'clear' });
-
-    return expect(localStorageProvider.dispatch({
-      command: 'get'
-    })).resolves.toEqual({});
-
-  });*/
+    return expect(configService.values()).resolves.toEqual([
+      {
+        numValue: 1,
+        stringValue: 'test'
+      },
+      {
+        numValue: 3,
+        stringValue: 'testX'
+        }
+    ]);
+  });
 });

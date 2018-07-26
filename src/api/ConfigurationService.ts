@@ -1,8 +1,8 @@
 export interface ConfigurationService {
-  // STAGE 2 clearAll(): Promise<any>;
-  // STAGE 2 clearKey(): Promise<any>;
+  clearAll(): Promise<void>;
+  clearKey(key: string): Promise<void>;
   get(key: string): Promise<any>;
-  // STAGFE 2 keys(): Promise<Array<any>>;
-  set(key: string, value: any): Promise<any>;
-  // STAGE 2 values(): Promise<Array<any>>;
+  keys(): Promise<Array<string>>;
+  set(key: string, value: any): Promise<void>;
+  values(): Promise<Array<any>>;
 };

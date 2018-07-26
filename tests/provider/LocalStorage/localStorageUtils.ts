@@ -21,16 +21,17 @@ export class LocalStorage {
   }
 }
 
-export const mockGlobalLocalStorage = () => global.localStorage = new LocalStorage();
+export const removeLocalStorage = () => delete global.localStorage;
+
+export const mockLocalStorage = () => global.localStorage = new LocalStorage();
 
 export const buildConfigurationServiceLocalStorage = (configKey: string, configValue?: any) => {
-  mockGlobalLocalStorage();
+  mockLocalStorage();
 
   const configService = new ConfigurationServiceLocalStorage('testConfig');
 
-  if (configValue) {
-    configService.set(configKey, configValue);
-  }
+  return configValue ?
+    configService.set(configKey, configValue).then(() => configService) :
+    Promise.resolve(configService);
 
-  return configService;
 };
