@@ -42,7 +42,7 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
     });
   }
 
-  get(key: string) {
+  get<T>(key: string): Promise<T> {
     return this.getConfig().then(config =>
       Object.keys(config).indexOf(key) >= 0 ?
         Promise.resolve(config[key]) :
@@ -54,7 +54,7 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
     return this.getConfig().then(config => Object.keys(config));
   }
 
-  set(key: string, value: any) {
+  set<T>(key: string, value: T) {
     const { storageItem } = this;
 
     return this.getConfig().then(config =>
@@ -65,7 +65,7 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
     );
   }
 
-  values() {
+  values<T>(): Promise<Array<T>> {
     return this.getConfig().then(config => Object.keys(config).map(key => config[key]));
   }
 }
