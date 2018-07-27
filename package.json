@@ -1,6 +1,6 @@
 {
   "name": "capsulajs-configuration-service",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Capsula-JS Configuration Service",
   "main": "index.js",
   "repository": "https://github.com/capsulajs/capsulajs-configuration-service",
@@ -9,6 +9,7 @@
   "private": false,
   "scripts": {
     "build:ts": "tsc",
+    "build": "yarn build:ts",
     "test": "jest"
   },
   "jest": {
