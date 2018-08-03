@@ -10,7 +10,8 @@
   "scripts": {
     "build:ts": "tsc",
     "build": "yarn build:ts",
-    "test": "jest"
+    "test": "jest",
+    "tsdoc": "rimraf docs/typescript && typedoc --mode file --module commonjs --jsx react --out ./docs/typescript --target es5 --ignoreCompilerErrors"
   },
   "jest": {
     "transform": {
@@ -32,6 +33,7 @@
     "flowgen": "^1.2.2",
     "jest": "^23.4.1",
     "ts-jest": "^23.0.1",
+    "typedoc": "^0.11.1",
     "typescript": "^2.9.2"
   }
 }

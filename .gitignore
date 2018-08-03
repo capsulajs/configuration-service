@@ -1,2 +1,8 @@
-node_modules
-lib
+.npmrc
+package-lock.json
+.idea/
+node_modules/
+docs/
+dist/
+coverage/
+docs/
