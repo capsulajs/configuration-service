@@ -1,24 +1,27 @@
 import { ConfigurationService } from 'src/api';
 
+const globalAny: any = global;
+const storage = globalAny.localStorage;
+
 export class ConfigurationServiceLocalStorage implements ConfigurationService {
   constructor(private storageItem: string) {
     this.clearAllInt();
   }
 
   private clearAllInt() {
-    if (global.localStorage) {
-      localStorage.setItem(this.storageItem, JSON.stringify({}));
+    if (storage) {
+      storage.setItem(this.storageItem, JSON.stringify({}));
     } else {
       throw Error('localStorage does not exist');
     }
   }
 
   private getConfig(): Promise<any> {
-    if (!global.localStorage) {
+    if (!storage) {
       return Promise.reject(new Error('localStorage does not exist'));
     }
 
-    const stringValue = (localStorage.getItem(this.storageItem) || '').trim();
+    const stringValue = (storage.getItem(this.storageItem) || '').trim();
     if (!stringValue) {
       return Promise.reject(new Error('Configuration not found'));
     }
@@ -38,7 +41,7 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
     const { storageItem } = this;
 
     return this.getConfig().then(config => {
-      localStorage.setItem(storageItem, JSON.stringify(delete config[key]));
+      storage.setItem(storageItem, JSON.stringify(delete config[key]));
     });
   }
 
@@ -58,7 +61,7 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
     const { storageItem } = this;
 
     return this.getConfig().then(config =>
-      localStorage.setItem(storageItem, JSON.stringify({
+      storage.setItem(storageItem, JSON.stringify({
         ...config,
         [key]: value
       }))
