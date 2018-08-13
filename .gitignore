@@ -1,6 +1,7 @@
 .npmrc
 package-lock.json
 .idea/
+lib/
 node_modules/
 docs/
 dist/

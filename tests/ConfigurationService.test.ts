@@ -1,8 +1,5 @@
 import { ConfigurationService } from 'src/api/ConfigurationService';
-import {
-  removeLocalStorage,
-  buildConfigurationServiceLocalStorage
-} from './provider/LocalStorage/localStorageUtils';
+import { buildConfigurationServiceLocalStorage } from './utils/localStorageProvider';
 
 describe('Test suite fro the LocalStorageProvider', () => {
   
@@ -11,7 +8,7 @@ describe('Test suite fro the LocalStorageProvider', () => {
     return await buildConfigurationServiceLocalStorage(configKey, defaultValues) as ConfigurationService;
   };
 
-  beforeEach(removeLocalStorage);
+  beforeEach(localStorage.clear);
 
   it('When getting not existing key should rejects with Error "Configuration key aKey not found"', async () => {
     const configService = await createConfigurationService();
@@ -25,7 +22,7 @@ describe('Test suite fro the LocalStorageProvider', () => {
     return expect(configService.clearAll()).resolves.toBeUndefined();
   });
   
-  it('When clearAll without a configuration values', async () => {
+  it('When clearAll with a configuration values', async () => {
     const configService = await createConfigurationService({numValue: 1, stringValue: 'test'});
     expect.assertions(1);
     return expect(configService.clearAll()).resolves.toBeUndefined();

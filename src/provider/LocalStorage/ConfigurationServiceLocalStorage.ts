@@ -6,19 +6,11 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
   }
 
   private clearAllInt() {
-    if (global.localStorage) {
-      global.localStorage.setItem(this.storageItem, JSON.stringify({}));
-    } else {
-      throw Error('localStorage does not exist');
-    }
+    localStorage.setItem(this.storageItem, JSON.stringify({}));
   }
 
   private getConfig(): Promise<any> {
-    if (!global.localStorage) {
-      return Promise.reject(new Error('localStorage does not exist'));
-    }
-
-    const stringValue = (global.localStorage.getItem(this.storageItem) || '').trim();
+    const stringValue = (localStorage.getItem(this.storageItem) || '').trim();
     if (!stringValue) {
       return Promise.reject(new Error('Configuration not found'));
     }
@@ -38,7 +30,7 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
     const { storageItem } = this;
 
     return this.getConfig().then(config => {
-      global.localStorage.setItem(storageItem, JSON.stringify(delete config[key]));
+      localStorage.setItem(storageItem, JSON.stringify(delete config[key]));
     });
   }
 
@@ -58,7 +50,7 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
     const { storageItem } = this;
 
     return this.getConfig().then(config =>
-      global.localStorage.setItem(storageItem, JSON.stringify({
+      localStorage.setItem(storageItem, JSON.stringify({
         ...config,
         [key]: value
       }))
