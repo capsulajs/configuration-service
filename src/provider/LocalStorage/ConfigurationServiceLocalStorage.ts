@@ -2,10 +2,10 @@ import { ConfigurationService } from 'src/api';
 
 export class ConfigurationServiceLocalStorage implements ConfigurationService {
   constructor(private storageItem: string) {
-    this.clearAllInt();
+    this.deleteAllInt();
   }
 
-  private clearAllInt() {
+  private deleteAllInt() {
     localStorage.setItem(this.storageItem, JSON.stringify({}));
   }
 
@@ -22,11 +22,11 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
     }
   }
 
-  clearAll() {
-    return Promise.resolve(this.clearAllInt());
+  deleteAll() {
+    return Promise.resolve(this.deleteAllInt());
   }
 
-  clearKey(key: string) {
+  deleteKey(key: string) {
     const { storageItem } = this;
 
     return this.getConfig().then(config => {

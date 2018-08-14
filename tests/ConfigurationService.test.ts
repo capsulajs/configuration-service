@@ -16,22 +16,22 @@ describe('Test suite fro the LocalStorageProvider', () => {
     return expect(configService.get('aKey')).rejects.toEqual(new Error('Configuration key aKey not found'));
   });
   
-  it('When clearAll without any configuration values', async () => {
+  it('When deleteAll without any configuration values', async () => {
     const configService = await createConfigurationService();
     expect.assertions(1);
-    return expect(configService.clearAll()).resolves.toBeUndefined();
+    return expect(configService.deleteAll()).resolves.toBeUndefined();
   });
   
-  it('When clearAll with a configuration values', async () => {
+  it('When deleteAll with a configuration values', async () => {
     const configService = await createConfigurationService({numValue: 1, stringValue: 'test'});
     expect.assertions(1);
-    return expect(configService.clearAll()).resolves.toBeUndefined();
+    return expect(configService.deleteAll()).resolves.toBeUndefined();
   });
   
-  it('When clearKey removes a configuration key', async () => {
+  it('When deleteKey removes a configuration key', async () => {
     const configService = await createConfigurationService({numValue: 1, stringValue: 'test'});
     expect.assertions(1);
-    await configService.clearKey(configKey);
+    await configService.deleteKey(configKey);
     return expect(configService.get(configKey)).rejects.toEqual(
       new Error(`Configuration key ${configKey} not found`)
     );

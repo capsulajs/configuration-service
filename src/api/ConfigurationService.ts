@@ -7,12 +7,12 @@ export interface ConfigurationService {
    * The method provides the deletion of all configuration keys
    * @return empty promise
    * */
-  clearAll(): Promise<void>;
+  deleteAll(): Promise<void>;
   /**
    * The method provides the deletion of configuration by specific key
    * @return empty promise
    * */
-  clearKey(key: string): Promise<void>;
+  deleteKey(key: string): Promise<void>;
   /**
    * The method provides the configuration by specific key
    * @return promise with configuration object
