@@ -29,7 +29,9 @@
       "./"
     ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
   "devDependencies": {
     "@types/jest": "^23.3.0",
     "@types/node": "^10.5.2",
