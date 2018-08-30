@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('./generators/travis');
+module.exports = require('./generator');

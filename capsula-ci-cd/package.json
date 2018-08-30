@@ -4,13 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "travis": "node ./generators/travis.js"
+    "test": "mocha"
   },
   "dependencies": {
     "is-valid-app": "^0.2.0"
   },
   "devDependencies": {
-    "generate": "^0.14.0",
+    "delete": "^0.3.2",
+    "generate": "^0.9.8",
+    "mocha": "^2.5.3",
     "npm-install-global": "^0.1.2"
   }
 }
