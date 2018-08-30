@@ -1,0 +1,16 @@
+{
+  "name": "capsula-ci-cd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "travis": "node ./generators/travis.js"
+  },
+  "dependencies": {
+    "is-valid-app": "^0.2.0"
+  },
+  "devDependencies": {
+    "generate": "^0.14.0",
+    "npm-install-global": "^0.1.2"
+  }
+}
