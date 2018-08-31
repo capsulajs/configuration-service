@@ -23,7 +23,7 @@ function exists(name, cb) {
   };
 }
 
-describe('generate-travis', function() {
+describe('capsula-ci-cd', function() {
   if (!process.env.CI && !process.env.TRAVIS) {
     before(function(cb) {
       npm.maybeInstall('generate', cb);
@@ -67,62 +67,25 @@ describe('generate-travis', function() {
     it('should extend tasks onto the instance', function() {
       assert(app.tasks.hasOwnProperty('default'));
       assert(app.tasks.hasOwnProperty('travis'));
-    });
-
-    it('should run the `travis` task with .build', function(cb) {
-      app.build('travis', exists('.travis.yml', cb));
+      assert(app.tasks.hasOwnProperty('deploy'));
+      assert(app.tasks.hasOwnProperty('release'));
+      assert(app.tasks.hasOwnProperty('trigger_travis_build'));
     });
 
     it('should run the `travis` task with .generate', function(cb) {
       app.generate('travis', exists('.travis.yml', cb));
     });
-  });
-
-  if (!process.env.CI && !process.env.TRAVIS) {
-    describe('generator (CLI)', function() {
-      it('should run the default task using the `travis` generator alias', function(cb) {
-        app.use(generator);
-        app.generate('travis', exists('.travis.yml', cb));
-      });
-    });
-  }
   
-  describe('sub-generator', function() {
-    it('should work as a sub-generator', function(cb) {
-      app.register('foo', function(foo) {
-        foo.register('travis', generator);
-      });
-      app.generate('foo.travis', exists('.travis.yml', cb));
+    it('should run the `deploy` task with .generate', function(cb) {
+      app.generate('deploy', exists('build/deploy.sh', cb));
     });
-
-    it('should run the `default` task by default', function(cb) {
-      app.register('foo', function(foo) {
-        foo.register('travis', generator);
-      });
-      app.generate('foo.travis', exists('.travis.yml', cb));
+  
+    it('should run the `release` task with .generate', function(cb) {
+      app.generate('release', exists('build/release.sh', cb));
     });
-
-    it('should run the `travis:default` task when defined explicitly', function(cb) {
-      app.register('foo', function(foo) {
-        foo.register('travis', generator);
-      });
-      app.generate('foo.travis:default', exists('.travis.yml', cb));
-    });
-
-    it('should run the `travis:travis` task', function(cb) {
-      app.register('foo', function(foo) {
-        foo.register('travis', generator);
-      });
-      app.generate('foo.travis:travis', exists('.travis.yml', cb));
-    });
-
-    it('should work with nested sub-generators', function(cb) {
-      app
-        .register('foo', generator)
-        .register('bar', generator)
-        .register('baz', generator)
-
-      app.generate('foo.bar.baz', exists('.travis.yml', cb));
+  
+    it('should run the `trigger_travis_build` task with .generate', function(cb) {
+      app.generate('trigger_travis_build', exists('build/trigger_travis_build.sh', cb));
     });
   });
 });
