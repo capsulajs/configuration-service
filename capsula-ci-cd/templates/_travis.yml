@@ -1,0 +1,34 @@
+sudo: true
+language: node_js
+node_js:
+  - "8"
+
+branches:
+  only:
+  - /.*/
+
+before_install:
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
+  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+install:
+  - sudo apt update && sudo apt install -y yarn
+  - npm install -g node-pre-gyp
+  - /usr/bin/yarn install --production=false
+  - npm run test
+  - pip install --user ansible boto botocore boto3
+
+script:
+  - npm run build
+
+after_success:
+  - npm run kss
+  - npm run tsdoc
+  - npm run coverage
+  - bash build/trigger_travis_build.sh jivygroup mp-widgets-customizations develop
+  - bash build/deploy.sh "jivygroup/mp-widgets"
+
+notifications:
+  email:
+    on_failure: always
