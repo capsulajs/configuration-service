@@ -1,0 +1,28 @@
+sudo: true
+language: node_js
+node_js:
+  - "8"
+
+branches:
+  only:
+    - /.*/
+
+before_install:
+  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+install:
+  - sudo apt update && sudo apt install -y yarn
+  - /usr/bin/yarn install --production=false
+  - npm run test
+
+script:
+  - npm run build
+
+after_success:
+  - npm run tsdoc
+  - bash build/deploy.sh
+
+notifications:
+  email:
+    on_failure: always
