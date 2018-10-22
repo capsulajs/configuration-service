@@ -14,14 +14,13 @@ before_install:
 install:
   - sudo apt update && sudo apt install -y yarn
   - /usr/bin/yarn install --production=false
-  # - npm run test
+  # - yarn test
 
 script:
-  - npm run tsdoc
-  - npm run build
+  - yarn build
 
 after_success:
-  - npm run tsdoc
+  - yarn tsdoc
   - bash build/deploy.sh
 
 notifications:
