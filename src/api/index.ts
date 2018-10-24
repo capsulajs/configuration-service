@@ -1,1 +1,2 @@
-export { ConfigurationService } from './ConfigurationService';
+export { ConfigurationServiceInterface } from './ConfigurationServiceInterface';
+export { ConfigurationServiceBase } from './ConfigurationServiceBase';

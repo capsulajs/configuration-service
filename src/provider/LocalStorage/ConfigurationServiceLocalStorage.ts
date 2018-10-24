@@ -1,16 +1,17 @@
-import { ConfigurationService } from 'src/api';
+import { ConfigurationServiceBase } from '../../api';
 
-export class ConfigurationServiceLocalStorage implements ConfigurationService {
-  constructor(private storageItem: string) {
+export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServiceBase<T> {
+  constructor(configName: string) {
+    super(configName);
     this.deleteAllInt();
   }
 
   private deleteAllInt() {
-    localStorage.setItem(this.storageItem, JSON.stringify({}));
+    localStorage.setItem(this.configName, JSON.stringify({}));
   }
 
   private getConfig(): Promise<any> {
-    const stringValue = (localStorage.getItem(this.storageItem) || '').trim();
+    const stringValue = (localStorage.getItem(this.configName) || '').trim();
     if (!stringValue) {
       return Promise.reject(new Error('Configuration not found'));
     }
@@ -27,10 +28,10 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
   }
 
   deleteKey(key: string) {
-    const { storageItem } = this;
+    const { configName } = this;
 
     return this.getConfig().then(config => {
-      localStorage.setItem(storageItem, JSON.stringify(delete config[key]));
+      localStorage.setItem(configName, JSON.stringify(delete config[key]));
     });
   }
 
@@ -47,10 +48,10 @@ export class ConfigurationServiceLocalStorage implements ConfigurationService {
   }
 
   set<T>(key: string, value: T) {
-    const { storageItem } = this;
+    const { configName } = this;
 
     return this.getConfig().then(config =>
-      localStorage.setItem(storageItem, JSON.stringify({
+      localStorage.setItem(configName, JSON.stringify({
         ...config,
         [key]: value
       }))

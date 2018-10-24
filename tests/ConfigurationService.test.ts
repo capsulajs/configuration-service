@@ -1,11 +1,10 @@
-import { ConfigurationService } from 'src/api/ConfigurationService';
 import { buildConfigurationServiceLocalStorage } from './utils/localStorageProvider';
 
-describe('Test suite fro the LocalStorageProvider', () => {
+describe('Test suite for the LocalStorageProvider', () => {
   
   const configKey = 'localStorageKey';
-  const createConfigurationService = async (defaultValues = undefined): ConfigurationService => {
-    return await buildConfigurationServiceLocalStorage(configKey, defaultValues) as ConfigurationService;
+  const createConfigurationService = (defaultValues: any = null) => {
+    return  buildConfigurationServiceLocalStorage(configKey, defaultValues);
   };
 
   beforeEach(localStorage.clear);
