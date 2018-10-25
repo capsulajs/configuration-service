@@ -13,8 +13,8 @@ before_install:
 
 install:
   - sudo apt update && sudo apt install -y yarn
-  - /usr/bin/yarn install --production=false
-  # - yarn test
+  - yarn install --production=false
+  - yarn test
 
 script:
   - yarn build
