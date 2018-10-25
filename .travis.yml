@@ -14,10 +14,6 @@ install:
 script:
   - yarn build
 
-after_success:
-  - yarn tsdoc
-  - bash build/deploy.sh
-
 notifications:
   email:
     on_failure: always
