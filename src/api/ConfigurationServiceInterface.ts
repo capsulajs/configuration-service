@@ -1,9 +1,23 @@
+import {
+  CreateRepositoryRequest,
+  CreateRepositoryResponse,
+  SetRequest,
+  SetResponse,
+  GetRequest,
+  GetResponse,
+} from '.';
+
 /**
  * Interface of the ConfigurationService
  * Type Parameter T specifies the type of the key values
  */
 
 export interface ConfigurationServiceInterface<T=any> {
+
+  /**
+   * Creates a Configuration Repository
+   */
+  createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse>;
 
   /**
    * Deletes all the keys
@@ -21,7 +35,7 @@ export interface ConfigurationServiceInterface<T=any> {
    * Gets the value of the cpecified key
    * @return promise with the key's values
    * */
-  get(key: string): Promise<T>;
+  get(request: GetRequest): Promise<GetResponse>;
 
   /**
    * Gets a list of all the keys
@@ -33,7 +47,7 @@ export interface ConfigurationServiceInterface<T=any> {
    * Sets the value of the specified key
    * @return an empty promise
    * */
-  set(key: string, value: T): Promise<void>;
+  set(request: SetRequest): Promise<SetResponse>;
 
   /**
    * Gets a list of the values of all of the keys

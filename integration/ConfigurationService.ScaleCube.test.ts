@@ -3,6 +3,7 @@
 // import { AxiosDispatcher } from 'capsulajs-transport-providers';
 import { Dispatcher, WebSocketDispatcher } from 'capsulajs-transport-providers';
 import { OrganizationService } from 'account-service';
+import { ConfigurationServiceScaleCube } from 'provider/ScaleCube';
 
 jest.setTimeout(30000);
 
@@ -19,9 +20,9 @@ import { getAuth0Token } from './getAuth0Token';
 describe('Transport providers are available', () => {
 
   it('Creates an instance of the AxiosDispatcher', async () => {
-    expect.assertions(4);
+    expect.assertions(5);
 
-    let dispatcher: Dispatcher;
+    // let dispatcher: Dispatcher;
     try {
 
       const { data: { access_token: auth0Token } } = await getAuth0Token();
@@ -52,9 +53,22 @@ describe('Transport providers are available', () => {
         apiKeyName,
         claims: { role: 'Owner' },
       });
-      const apiKey = response.apiKeys[0].key;
+      const apiKey: string = response.apiKeys[0].key;
       expect(apiKey).toBeTruthy();
       console.log('Api Key created:\n', apiKey);
+
+      const configService = new ConfigurationServiceScaleCube(
+        'CONFIG',
+        {
+          issuer: 'Auth0',
+          token: apiKey,
+        },
+        dispatcher
+      );
+
+      response = await configService.createRepository({});
+      expect(response).toEqual({});
+      console.log('Configuration created:\n', response);
 
       response = await orgService.deleteOrganization({
         token: {

@@ -6,7 +6,7 @@ export const buildConfigurationServiceLocalStorage = (configKey: string, configV
   const configService = new ConfigurationServiceLocalStorage('testConfig');
 
   return configValue ?
-    configService.set(configKey, configValue).then(() => configService) :
+    configService.set({ key: configKey, value: configValue }).then(() => configService) :
     Promise.resolve(configService);
 
 };

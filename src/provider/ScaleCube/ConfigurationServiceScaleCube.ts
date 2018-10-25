@@ -1,14 +1,39 @@
 import { Dispatcher } from 'capsulajs-transport-providers';
 
-import { ConfigurationServiceBase } from '../../api';
+import {
+  Token,
+  ConfigurationServiceBase,
+  CreateRepositoryRequest,
+  CreateRepositoryResponse,
+  SetRequest,
+  SetResponse,
+  GetRequest,
+  GetResponse,
+} from '../../api';
 
 export class ConfigurationServiceScaleCube<T=any> extends ConfigurationServiceBase<T> {
-  private dispatcher: Dispatcher;
+  // private
+  // private dispatcher: Dispatcher;
 
-  constructor(configName: string, dispatcher: Dispatcher) {
+  constructor(configName: string, private token: Token, private dispatcher: Dispatcher) {
     super(configName);
-    this.dispatcher = dispatcher;
+    // this.dispatcher = dispatcher;
   };
+
+  private prepRequest(request: any): any {
+    return {
+      token: this.token,
+      repository: this.configName,
+      ...request
+    };
+  }
+
+  createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
+    return this.dispatcher.dispatch(
+      '/io.scalecube.configuration.api.ConfigurationService/createRepository',
+      this.prepRequest(request),
+    );
+  }
 
   deleteAll(): Promise<void> {
     // TO BE DONE
@@ -20,9 +45,12 @@ export class ConfigurationServiceScaleCube<T=any> extends ConfigurationServiceBa
     return this.dispatcher.dispatch('/configuration/delete', { key });
   }
 
-  get<T>(key: string): Promise<T> {
+  get(request: GetRequest): Promise<GetResponse> {
     // TO BE DONE
-    return this.dispatcher.dispatch('/configuration/fetch', { key });
+    return this.dispatcher.dispatch(
+      '/io.scalecube.configuration.api.ConfigurationService/fetch',
+      this.prepRequest(request),
+    );
   }
 
   keys(): Promise<Array<string>> {
@@ -30,9 +58,12 @@ export class ConfigurationServiceScaleCube<T=any> extends ConfigurationServiceBa
     return this.dispatcher.dispatch('/configuration/fetch', { });
   }
 
-  set<T>(key: string, value: T): Promise<void> {
-    // TO BE DONE
-    return this.dispatcher.dispatch('/configuration/save', { key, value });
+  set(request: SetRequest<T>): Promise<SetResponse> {
+    // TO BE CHECKED
+    return this.dispatcher.dispatch(
+      '/io.scalecube.configuration.api.ConfigurationService/save',
+      this.prepRequest(request),
+    );
   }
 
   values<T>(): Promise<Array<T>> {

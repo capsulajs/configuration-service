@@ -1,4 +1,12 @@
-import { ConfigurationServiceBase } from '../../api';
+import {
+  ConfigurationServiceBase,
+  CreateRepositoryRequest,
+  CreateRepositoryResponse,
+  SetRequest,
+  SetResponse,
+  GetRequest,
+  GetResponse,
+} from '../../api';
 
 export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServiceBase<T> {
   constructor(configName: string) {
@@ -6,6 +14,7 @@ export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServic
     this.deleteAllInt();
   }
 
+  // Is this method really needed?
   private deleteAllInt() {
     localStorage.setItem(this.configName, JSON.stringify({}));
   }
@@ -23,6 +32,11 @@ export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServic
     }
   }
 
+  createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
+    this.deleteAllInt();
+    return Promise.resolve({});
+  }
+
   deleteAll() {
     return Promise.resolve(this.deleteAllInt());
   }
@@ -35,7 +49,9 @@ export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServic
     });
   }
 
-  get<T>(key: string): Promise<T> {
+  get(request: GetRequest): Promise<GetResponse> {
+    const { key } = request;
+
     return this.getConfig().then(config =>
       Object.keys(config).indexOf(key) >= 0 ?
         Promise.resolve(config[key]) :
@@ -47,15 +63,18 @@ export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServic
     return this.getConfig().then(config => Object.keys(config));
   }
 
-  set<T>(key: string, value: T) {
+  set(request: SetRequest): Promise<SetResponse> {
     const { configName } = this;
+    const { key, value } = request;
 
-    return this.getConfig().then(config =>
+    this.getConfig().then(config =>
       localStorage.setItem(configName, JSON.stringify({
         ...config,
         [key]: value
       }))
     );
+
+    return Promise.resolve({});
   }
 
   values<T>(): Promise<Array<T>> {

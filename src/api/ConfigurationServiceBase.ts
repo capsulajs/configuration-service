@@ -1,4 +1,12 @@
-import { ConfigurationServiceInterface } from '.';
+import {
+  ConfigurationServiceInterface,
+  CreateRepositoryRequest,
+  CreateRepositoryResponse,
+  SetRequest,
+  SetResponse,
+  GetRequest,
+  GetResponse,
+} from '.';
 
 /**
  * Interface of the ConfigurationService
@@ -15,15 +23,17 @@ export abstract class ConfigurationServiceBase<T=any> implements ConfigurationSe
     protected configName: string,
   ) {};
 
+  abstract createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse>;
+
   abstract deleteAll(): Promise<void>;
 
   abstract deleteKey(key: string): Promise<void>;
 
-  abstract get(key: string): Promise<T>;
+  abstract get(request: GetRequest): Promise<GetResponse>;
 
   abstract keys(): Promise<Array<string>>;
 
-  abstract set(key: string, value: T): Promise<void>;
+  abstract set(request: SetRequest): Promise<SetResponse>;
 
   abstract values(): Promise<Array<T>>;
 };
