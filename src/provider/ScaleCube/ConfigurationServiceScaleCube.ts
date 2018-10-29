@@ -1,7 +1,7 @@
 import { Dispatcher } from 'capsulajs-transport-providers';
 
 import {
-  Token,
+  // Token,
   ConfigurationServiceBase,
   CreateRepositoryRequest,
   CreateRepositoryResponse,
@@ -15,7 +15,7 @@ export class ConfigurationServiceScaleCube<T=any> extends ConfigurationServiceBa
   // private
   // private dispatcher: Dispatcher;
 
-  constructor(configName: string, private token: Token, private dispatcher: Dispatcher) {
+  constructor(configName: string, private token: string, private dispatcher: Dispatcher) {
     super(configName);
     // this.dispatcher = dispatcher;
   };
@@ -45,12 +45,14 @@ export class ConfigurationServiceScaleCube<T=any> extends ConfigurationServiceBa
     return this.dispatcher.dispatch('/configuration/delete', { key });
   }
 
-  get(request: GetRequest): Promise<GetResponse> {
-    // TO BE DONE
+  get(request: GetRequest): Promise<GetResponse<T>> {
+    // TO BE CHECKED
     return this.dispatcher.dispatch(
       '/io.scalecube.configuration.api.ConfigurationService/fetch',
       this.prepRequest(request),
-    );
+    ).then(response => ({
+      value: (response as any).value
+    }));
   }
 
   keys(): Promise<Array<string>> {

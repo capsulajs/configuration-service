@@ -44,6 +44,5 @@ export interface GetRequest {
  * Get Value Response
  */
 export interface GetResponse<T=any> {
-  key: string;
   value: T;
 }

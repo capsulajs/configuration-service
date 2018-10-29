@@ -5,7 +5,8 @@ import { Dispatcher, WebSocketDispatcher } from 'capsulajs-transport-providers';
 import { OrganizationService } from 'account-service';
 import { ConfigurationServiceScaleCube } from 'provider/ScaleCube';
 
-jest.setTimeout(30000);
+// Creating buckets in Couchbase takes some time
+jest.setTimeout(60 * 1000);
 
 import {
   wsUrl,
@@ -17,14 +18,15 @@ import {
 
 import { getAuth0Token } from './getAuth0Token';
 
-describe('Transport providers are available', () => {
+describe('Integranital sanity test of the ScaleCube configuration provider', () => {
 
-  it('Creates an instance of the AxiosDispatcher', async () => {
+  it('Creates an Organization, a Configuration for it and add/remove values in it', async () => {
     expect.assertions(5);
 
     // let dispatcher: Dispatcher;
     try {
 
+      // Get Auth0 token
       const { data: { access_token: auth0Token } } = await getAuth0Token();
       expect(auth0Token).toBeTruthy();
       console.log('Auth0 Token:\n', auth0Token);
@@ -32,6 +34,7 @@ describe('Transport providers are available', () => {
       const dispatcher = new WebSocketDispatcher(wsUrl);
       const orgService = new OrganizationService(dispatcher);
   
+      // Create Organization
       let response  = await orgService.createOrganization({
         token: {
           issuer: 'Auth0',
@@ -44,6 +47,7 @@ describe('Transport providers are available', () => {
       expect(orgId).toBeTruthy();
       console.log('Organization created:\n', orgId);
 
+      // Add Organization API Key
       response = await orgService.addOrganizationApiKey({
         token: {
           issuer: 'Auth0',
@@ -57,19 +61,43 @@ describe('Transport providers are available', () => {
       expect(apiKey).toBeTruthy();
       console.log('Api Key created:\n', apiKey);
 
+      // Create ScaleCube Configuration Provider
       const configService = new ConfigurationServiceScaleCube(
         'CONFIG',
-        {
-          issuer: 'Auth0',
-          token: apiKey,
-        },
+        apiKey,
         dispatcher
       );
 
+      // Create Configuration Repository
       response = await configService.createRepository({});
       expect(response).toEqual({});
       console.log('Configuration created:\n', response);
 
+      // Set a string Key Value
+      response = await configService.set({
+        key: 'stringKey',
+        value: 'Hello, World!',
+      });
+      console.log('String Value was set:\n', response);
+      // Get a string Key Value
+      response = await configService.get({
+        key: 'stringKey',
+      });
+      console.log('String Value was gotten:\n', response);
+
+      // Set a number Key Value
+      response = await configService.set({
+        key: 'numberKey',
+        value: Math.PI,
+      });
+      console.log('Number Value was set:\n', response);
+      // Get a number Key Value
+      response = await configService.get({
+        key: 'numberKey',
+      });
+      console.log('Number Value was gotten:\n', response);
+
+      // finally, Remove Organization
       response = await orgService.deleteOrganization({
         token: {
           issuer: 'Auth0',

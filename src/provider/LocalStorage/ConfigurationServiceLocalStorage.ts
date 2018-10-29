@@ -49,7 +49,7 @@ export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServic
     });
   }
 
-  get(request: GetRequest): Promise<GetResponse> {
+  get(request: GetRequest): Promise<GetResponse<T>> {
     const { key } = request;
 
     return this.getConfig().then(config =>
@@ -63,7 +63,7 @@ export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServic
     return this.getConfig().then(config => Object.keys(config));
   }
 
-  set(request: SetRequest): Promise<SetResponse> {
+  set(request: SetRequest<T>): Promise<SetResponse> {
     const { configName } = this;
     const { key, value } = request;
 
