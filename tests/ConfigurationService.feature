@@ -4,6 +4,10 @@
 
 # 'configurationService' configuration is built into the local storage from remote service with configKey, defaultValues
 Scenario: 'configKey' receive 'localStorageKey' and builds the configurationService local storage
+	Given   configurationService with buildConfigurationServiceLocalStorage method
+	And     user sends createConfigurationService request
+	Then    buildConfigurationServiceLocalStorage response will be received
+	And     buildConfigurationServiceLocalStorage (configKey, defaultValues)
 
 # The method 'deleteAll' provides the deletion of all configuration keys, return empty promise
 Scenario: If a 'deleteAll' is sent then a response received is rejected or passed
