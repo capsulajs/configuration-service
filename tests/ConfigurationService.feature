@@ -17,6 +17,12 @@ Scenario: If a 'deleteAll' is sent then a response received is rejected or passe
   Then    a rejected or passed response will be received
 
 Scenario: A 'deleteAll' is sent and no response is received due to server or network error
+  Given   configurationService with deleteAll method
+  And     keys array in local storage has configuration values
+  When    user sends a valid deleteAll request
+  And     network or server error
+  Then    a relevant error message will be presented
+  And     hub will continue to run
 
 Scenario: Validating the response from a 'deleteAll' method
 
