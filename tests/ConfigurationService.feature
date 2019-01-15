@@ -32,6 +32,7 @@ Scenario: Validating the response from a 'deleteAll' method
 
 # The method 'deleteKey' provides the deletion of configuration by specific key, return empty promise
 Scenario: If a 'deleteKey' is sent then a response received is rejected or passed
+  Given   configurationService with deleteKey method
 
 Scenario: A 'deleteKey' is sent and no response is received due to server or network error
 
