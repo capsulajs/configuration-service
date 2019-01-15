@@ -43,8 +43,17 @@ Scenario: If a 'deleteKey' is sent with a non exist key, an error will be receiv
   And     error(`Configuration key ${configKey} not found`)
 
 Scenario: A 'deleteKey' is sent and no response is received due to server or network error
+  Given   configurationService with deleteKey method
+  When    user sends a valid deleteKey request
+  And     network or server error
+  Then    a relevant error message will be presented
+  And     hub will continue to run
 
 Scenario: Validating the response from a 'deleteKey' method
+  Given   configurationService with deleteKey method
+  When    user sends a valid deleteKey request (default values{numValue: 1, stringValue: 'test'})
+  And     response that was given was not a rejected or passed
+  Then    a relevant error will be presented
 
 # The method 'get' provides the configuration by specific key, return promise with configuration object
 Scenario: 'get' method is used for a specific key, return configuration received
