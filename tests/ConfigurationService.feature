@@ -10,9 +10,9 @@ Scenario: 'configKey' receive 'localStorageKey' and builds the configurationServ
   And     buildConfigurationServiceLocalStorage (configKey, defaultValues)
 
 # The method 'deleteAll' provides the deletion of all configuration keys, return empty promise
-Scenario: If a 'deleteAll' is sent then a response received is rejected or passed
+Scenario: If a valid 'deleteAll' is sent then a response received is rejected or passed
   Given   configurationService with deleteAll method
-  When    user sends a deleteAll request
+  When    user sends a valid deleteAll request (default values{numValue: 1, stringValue: 'test'})
   And     request is valid
   Then    a rejected or passed response will be received
 
@@ -24,15 +24,23 @@ Scenario: A 'deleteAll' is sent and no response is received due to server or net
   Then    a relevant error message will be presented
   And     hub will continue to run
 
-Scenario: Validating the response from a 'deleteAll' method
+Scenario: Validating the 'deleteAll' method values
   Given   configurationService with deleteAll method
-  When    user sends a valid deleteAll request
-  And     request is valid
+  When    user sends a deleteAll request (default values{numValue: 1, stringValue: 'test'})
   Then    a rejected or passed response will be received
 
 # The method 'deleteKey' provides the deletion of configuration by specific key, return empty promise
 Scenario: If a 'deleteKey' is sent then a response received is rejected or passed
   Given   configurationService with deleteKey method
+  When    user sends a valid deleteKey request (default values{numValue: 1, stringValue: 'test'})
+  Then    a rejected or passed response will be received
+
+Scenario: If a 'deleteKey' is sent with a non exist key, an error will be received
+  Given   configurationService with deleteKey method
+  When    user sends a deleteKey request
+  And     key sent does not exist
+  Then    rejected response will be received
+  And     error(`Configuration key ${configKey} not found`)
 
 Scenario: A 'deleteKey' is sent and no response is received due to server or network error
 
