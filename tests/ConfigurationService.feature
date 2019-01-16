@@ -80,8 +80,16 @@ Scenario: 'keys' method is used by ConfigurationService to send configurations f
   Then    configuration object array of configuration keys requested in configKey will be emitted
 
 Scenario: 'keys' method is used by ConfigurationService to send a non exist value, an error will be presented
+  Given   configurationService with keys method
+  When    user sends a non exist keys request (configKey + '9999')
+  Then    a relevant error will be received
 
 Scenario: Validating the 'keys' return value (string)
+  Given   configurationService with keys method
+  When    user sends a valid 'keys' request with <configKey> <numValue>, <stringValue>
+  |configKey  |numValue |stringValue	|
+  |!(string)  |!(string)|!(string)		|
+  Then    a relevant error will be received
 
 # The method 'set' provides the setting of configuration by specific key, return empty promise
 Scenario: 'set' method is used to send a specific key configuration, response received is rejected or passed
