@@ -57,13 +57,21 @@ Scenario: Validating the response from a 'deleteKey' method
 
 # The method 'get' provides the configuration by specific key, return promise with configuration object
 Scenario: 'get' method is used for a specific key, return configuration received
-  Given   configurationService with deleteKey method
+  Given   configurationService with get method
   When    user sends a valid 'get' request with ({numValue: 3, stringValue: 'testX'})
   Then    configuration object will be emitted
 
 Scenario: 'get' method is sent with a non exist key, a rejection message "Configuration key aKey not found" will be received
+	Given		configurationService with get method
+	When		user sends a non exist stringValue
+	Then		an error message "Configuration key aKey not found" will be received
 
 Scenario: Validating the 'get' return value (string)
+	Given		configurationService with get method
+	When    user sends a valid 'get' request with <numValue>, <stringValue>
+	|numValue	|stringValue	|
+	|!(string)|!(string)		|
+	Then		a relevant error will be received
 
 # The method 'keys' provides the list of configuration keys, return promise string array
 Scenario: 'keys' method is used by ConfigurationService to send configurations for all keys, an array of configurations received
