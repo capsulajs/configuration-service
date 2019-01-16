@@ -68,7 +68,7 @@ Scenario: 'get' method is sent with a non exist key, a rejection message "Config
 
 Scenario: Validating the 'get' return value (string)
   Given   configurationService with get method
-  When    user sends a valid 'get' request with <numValue>, <stringValue>
+  When    user sends an in valid 'get' request with <numValue>, <stringValue>
   |numValue	|stringValue	|
   |!(string)|!(string)		|
   Then    a relevant error will be received
@@ -86,17 +86,28 @@ Scenario: 'keys' method is used by ConfigurationService to send a non exist valu
 
 Scenario: Validating the 'keys' return value (string)
   Given   configurationService with keys method
-  When    user sends a valid 'keys' request with <configKey> <numValue>, <stringValue>
+  When    user sends an invalid 'keys' request with <configKey> <numValue>, <stringValue>
   |configKey  |numValue |stringValue	|
   |!(string)  |!(string)|!(string)		|
   Then    a relevant error will be received
 
 # The method 'set' provides the setting of configuration by specific key, return empty promise
 Scenario: 'set' method is used to send a specific key configuration, response received is rejected or passed
+  Given   configurationService with set method
+  When    user sends a valid 'set' request with (configKey + '1', {numValue: 3, stringValue: 'testX'})
+  Then    a rejected or passed response will be received
 
 Scenario: 'set' method is used by ConfigurationService to send a non exist value, an error will be presented
+  Given   configurationService with set method
+  When    user sends a non exist 'set' value (numValue: 9999)
+  Then    a relevant error will be received
 
 Scenario: Validating the 'set' return value for a specific key (string)
+  Given   configurationService with set method
+  When    user sends an invalid 'set' request with <configKey> <numValue>, <stringValue>
+  |configKey  |numValue |stringValue	|
+  |!(string)  |!(string)|!(string)		|
+  Then    a relevant error will be received
 
 # The method 'values' provides the getting of configurations by specific key, return promise with array of configuration objects by all key
 Scenario: 'values' method is used to get the configuration of a specific key, response received is an array of configurations by all keys
