@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-
 import { auth0request } from './Auth0_security';
 
 const mapResponse = ({ status, statusText, data }: AxiosResponse) => ({ status, statusText, data });
