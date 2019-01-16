@@ -75,6 +75,9 @@ Scenario: Validating the 'get' return value (string)
 
 # The method 'keys' provides the list of configuration keys, return promise string array
 Scenario: 'keys' method is used by ConfigurationService to send configurations for all keys, an array of configurations received
+  Given   configurationService with keys method
+  When    user sends a valid keys request with (configKey + '1', {numValue: 3, stringValue: 'testX'})
+  Then    configuration object array of configuration keys requested in configKey will be emitted
 
 Scenario: 'keys' method is used by ConfigurationService to send a non exist value, an error will be presented
 
