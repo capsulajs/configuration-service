@@ -109,9 +109,20 @@ Scenario: Validating the 'set' return value for a specific key (string)
   |!(string)  |!(string)|!(string)		|
   Then    a relevant error will be received
 
-# The method 'values' provides the getting of configurations by specific key, return promise with array of configuration objects by all key
+# The method 'values' provides the getting of configurations by specific key, return promise with array of configuration objects by all keys
 Scenario: 'values' method is used to get the configuration of a specific key, response received is an array of configurations by all keys
+  Given   configurationService with set method
+  When    user sends a valid 'values' request with (configKey + 'A', {numValue: 3, stringValue: 'testX'})
+  Then    array of configuration  objects for all keys received
 
 Scenario: 'values' method is used by ConfigurationService to send a non exist value of a specific key, an error will be presented
+  Given   configurationService with set method
+  When    user sends an invalid 'values' request with (numValue: 9999)
+  Then    a relevant error will be received
 
 Scenario: Validating the 'values' returned response of the array
+  Given   configurationService with set method
+  When    user sends an invalid 'values' request with <configKey> <numValue>, <stringValue>
+  |configKey  |numValue |stringValue	|
+  |!(string)  |!(string)|!(string)		|
+  Then    a relevant error will be received
