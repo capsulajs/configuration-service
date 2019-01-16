@@ -57,6 +57,9 @@ Scenario: Validating the response from a 'deleteKey' method
 
 # The method 'get' provides the configuration by specific key, return promise with configuration object
 Scenario: 'get' method is used for a specific key, return configuration received
+  Given   configurationService with deleteKey method
+  When    user sends a valid 'get' request with ({numValue: 3, stringValue: 'testX'})
+  Then    configuration object will be emitted
 
 Scenario: 'get' method is sent with a non exist key, a rejection message "Configuration key aKey not found" will be received
 
