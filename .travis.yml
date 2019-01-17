@@ -1,0 +1,19 @@
+sudo: true
+language: node_js
+node_js:
+  - "8"
+
+branches:
+  only:
+    - /.*/
+
+install:
+  - yarn install --production=false
+  - yarn test
+
+script:
+  - yarn build
+
+notifications:
+  email:
+    on_failure: always

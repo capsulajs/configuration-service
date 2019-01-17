@@ -11,7 +11,7 @@
     "build:ts": "tsc",
     "build": "yarn build:ts",
     "test": "jest",
-    "tsdoc": "rimraf docs/typescript && typedoc --mode file --module commonjs --jsx react --out ./docs/typescript --target es5 --ignoreCompilerErrors"
+    "tsdoc": "rimraf docs/typescript && typedoc --mode file --module commonjs --out ./docs/typescript --target es5 --ignoreCompilerErrors"
   },
   "dependencies": {
     "axios": "^0.18.0"
