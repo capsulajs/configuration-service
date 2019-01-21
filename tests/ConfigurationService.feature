@@ -2,6 +2,9 @@
 # Capsula-Hub ConfigurationService Gherkin  #
 #############################################
 
+# This copy is here for documentation purposes, it contains all the comments after the review made with Irina & Misha.
+
+
 # REMOVE, THIS IS NOT A SCENARIO FOR TESTING
 # 'configurationService' configuration is built into the local storage from remote service with configKey, defaultValues
 Scenario: 'configKey' receive 'localStorageKey' and builds the configurationService local storage
