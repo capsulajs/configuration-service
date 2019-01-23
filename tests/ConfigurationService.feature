@@ -108,7 +108,7 @@ Then    a relevant error will be received
 # To be used in the future when this logic wil be implemented.
 Scenario: Validating the 'set' request value for a specific key (string)
 Given   configurationService with set method
-When    user sends an invalid 'set' request with <configKey> <numValue>, <stringValue>
+When    user sends an invalid 'set' request with <Key> <Value>
 |Key        |Value    |
 |!(string)  |!(string)|
 Then    a relevant error will be received
@@ -118,7 +118,7 @@ Then    a relevant error will be received
 Scenario: Validating the 'values' request of the array
 Given   configurationService with values method
 And     provider has several configured keys
-When    user sends an invalid 'values' request with <configKey> <numValue>, <stringValue>
+When    user sends an invalid 'values' request with <Key>, <Value>
 |Key        |Value    |
 |!(string)  |!(string)|
 Then    a relevant error will be received
