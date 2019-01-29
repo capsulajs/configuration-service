@@ -16,9 +16,9 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@capsulajs/capsulajs-transport-providers@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/@capsulajs/capsulajs-transport-providers/-/capsulajs-transport-providers-0.1.0.tgz#a10ccf5e232aba455ab3047cda1335834575e0cb"
+"@capsulajs/capsulajs-transport-providers@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.npmjs.org/@capsulajs/capsulajs-transport-providers/-/capsulajs-transport-providers-0.1.1.tgz#c4f08cda57af8a1e1eef36b9ec13eb68434181fb"
   dependencies:
     axios "^0.18.0"
     typescript "^3.1.3"

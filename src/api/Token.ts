@@ -1,5 +1,5 @@
 /**
- * Authentication Token for the ScaleCube Services
+ * Authentication Token for the HardcoreRemote Services
  */
 
  export interface Token {

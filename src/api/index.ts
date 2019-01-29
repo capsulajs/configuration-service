@@ -1,11 +1,10 @@
-export { ConfigurationServiceInterface } from './ConfigurationServiceInterface';
-export { ConfigurationServiceBase } from './ConfigurationServiceBase';
+export { ConfigurationService } from './ConfigurationService';
 export { Token } from './Token';
 export {
   CreateRepositoryRequest,
   CreateRepositoryResponse,
-  SetRequest,
-  SetResponse,
-  GetRequest,
-  GetResponse,
+  FetchRequest,
+  FetchResponse,
+  SaveRequest,
+  SaveResponse,
 } from './ConfigurationServiceTypes';

@@ -1,10 +1,9 @@
 {
-  "name": "capsulajs-configuration-service",
+  "name": "@capsulajs/capsulajs-configuration-service",
   "version": "0.1.0",
   "description": "Capsula-JS Configuration Service",
   "main": "index.js",
-  "repository": "https://github.com/capsulajs/capsulajs-configuration-service",
-  "author": "Taras Shedenko <taras.shedenko@jivygroup.com>",
+  "author": "CapsulaJS",
   "license": "MIT",
   "private": false,
   "scripts": {
@@ -14,7 +13,7 @@
     "tsdoc": "rimraf docs/typescript && typedoc --mode file --module commonjs --out ./docs/typescript --target es5 --ignoreCompilerErrors"
   },
   "dependencies": {
-    "@capsulajs/capsulajs-transport-providers": "^0.1.0"
+    "@capsulajs/capsulajs-transport-providers": "^0.1.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.0",

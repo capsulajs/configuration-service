@@ -11,12 +11,6 @@ import {
 export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServiceBase<T> {
   constructor(configName: string) {
     super(configName);
-    this.deleteAllInt();
-  }
-
-  // Is this method really needed?
-  private deleteAllInt() {
-    localStorage.setItem(this.configName, JSON.stringify({}));
   }
 
   private getConfig(): Promise<any> {
@@ -33,12 +27,11 @@ export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServic
   }
 
   createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
-    this.deleteAllInt();
     return Promise.resolve({});
   }
 
   deleteAll() {
-    return Promise.resolve(this.deleteAllInt());
+    return Promise.resolve(localStorage.setItem(this.configName, JSON.stringify({})));
   }
 
   deleteKey(key: string) {
