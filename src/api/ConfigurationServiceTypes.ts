@@ -11,7 +11,7 @@ export interface CreateRepositoryRequest {
 
 /**
  * Create Repository Response
- * An empty object, just an aknowledgement
+ * An empty object, just an acknowledgement
  */
 export interface CreateRepositoryResponse {
 };
@@ -28,7 +28,7 @@ export interface SetRequest<T=any> {
 
 /**
  * Set Value Response
- * An empty object, just an aknowledgement
+ * An empty object, just an acknowledgement
  */
 export interface SetResponse {
 };

@@ -1,7 +1,5 @@
-import { Dispatcher } from 'capsulajs-transport-providers';
-
+import { Dispatcher } from '@capsulajs/capsulajs-transport-providers';
 import {
-  // Token,
   ConfigurationServiceBase,
   CreateRepositoryRequest,
   CreateRepositoryResponse,
@@ -12,12 +10,8 @@ import {
 } from '../../api';
 
 export class ConfigurationServiceScaleCube<T=any> extends ConfigurationServiceBase<T> {
-  // private
-  // private dispatcher: Dispatcher;
-
   constructor(configName: string, private token: string, private dispatcher: Dispatcher) {
     super(configName);
-    // this.dispatcher = dispatcher;
   };
 
   private prepRequest(request: any): any {
@@ -36,32 +30,25 @@ export class ConfigurationServiceScaleCube<T=any> extends ConfigurationServiceBa
   }
 
   deleteAll(): Promise<void> {
-    // TO BE DONE
-    return this.dispatcher.dispatch('/configuration/delete', { key: null } );
+    return this.dispatcher.dispatch('/configuration/delete', { key: null });
   };
 
   deleteKey(key: string): Promise<void> {
-    // TO BE DONE
     return this.dispatcher.dispatch('/configuration/delete', { key });
   }
 
   get(request: GetRequest): Promise<GetResponse<T>> {
-    // TO BE CHECKED
     return this.dispatcher.dispatch(
       '/io.scalecube.configuration.api.ConfigurationService/fetch',
       this.prepRequest(request),
-    ).then(response => ({
-      value: (response as any).value
-    }));
+    ).then((request: any) => ({ value: request.value }));
   }
 
   keys(): Promise<Array<string>> {
-    // TO BE DONE
-    return this.dispatcher.dispatch('/configuration/fetch', { });
+    return this.dispatcher.dispatch('/configuration/fetch', {});
   }
 
   set(request: SetRequest<T>): Promise<SetResponse> {
-    // TO BE CHECKED
     return this.dispatcher.dispatch(
       '/io.scalecube.configuration.api.ConfigurationService/save',
       this.prepRequest(request),
@@ -69,7 +56,6 @@ export class ConfigurationServiceScaleCube<T=any> extends ConfigurationServiceBa
   }
 
   values<T>(): Promise<Array<T>> {
-    // TO BE DONE
-    return this.dispatcher.dispatch('/configuration/fetch', { });
+    return this.dispatcher.dispatch('/configuration/fetch', {});
   }
 }
