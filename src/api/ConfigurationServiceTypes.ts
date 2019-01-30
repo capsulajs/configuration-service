@@ -36,11 +36,9 @@ export interface DeleteResponse {};
 
 /**
  * Entries Request
- * @token - The requested API key (token) which assigned with relevant role (permission level)
  * @repository - Specified name of the repository
  */
 export interface EntriesRequest {
-  token: string;
   repository: string;
 }
 
@@ -58,12 +56,10 @@ export interface EntriesResponse<T=any> {
 
 /**
  * Fetch Value Request
- * @token - The requested API key (token) which assigned with relevant role (permission level)
  * @repository - Specified name of the repository
  * @key - Specified key name (entry) for relevant configuration setting in the repository
  */
 export interface FetchRequest {
-  token: string;
   repository: string;
   key: string;
 };
@@ -80,13 +76,11 @@ export interface FetchResponse<T=any> {
 
 /**
  * Save Value Request
- * @token - The requested API key (token) which assigned with relevant role (permission level)
  * @repository - Specified name of the repository
  * @key - Specified key name (entry) for relevant configuration setting in the repository
  * @value - Specified node (entry) name applied for relevant configuration settings in the repository
  */
 export interface SaveRequest<T=any> {
-  token: string;
   repository: string;
   key: string;
   value: T;

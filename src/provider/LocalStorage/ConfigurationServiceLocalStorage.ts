@@ -32,7 +32,16 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
   }
 
   createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
+    if (!this.token) {
+      return Promise.reject(new Error('Configuration repository token not provided'))
+    }
+  
+    if (!request.repository) {
+      return Promise.reject(new Error('Configuration repository not provided'))
+    }
+    
     localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({}));
+    
     return Promise.resolve({ repository: request.repository });
   }
 
