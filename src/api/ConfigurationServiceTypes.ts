@@ -1,3 +1,5 @@
+import { Entity } from './Entity';
+
 /**
  * Type definitions for Configuration Service requests and responses
  */
@@ -45,9 +47,7 @@ export interface EntriesRequest {
  * @value - Specified key name (entry) for relevant configuration setting in the repository
  */
 export interface EntriesResponse<T=any> {
-  entries: Array<T>,
-  key?: string;
-  value?: string;
+  entries: Array<Entity<T>>;
 };
 
 /**

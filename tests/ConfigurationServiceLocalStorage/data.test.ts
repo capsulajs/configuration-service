@@ -12,40 +12,43 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
   
   it('createRepository() should create configuration repository', async () => {
     expect.assertions(2);
-    expect(await configService.createRepository({ token, repository })).toEqual({ repository });
-    expect(await configService.entries({ token, repository })).toEqual({ entries: [] });
+    expect(await configService.createRepository({ repository })).toEqual({ repository });
+    expect(await configService.entries({ repository })).toEqual({ entries: [] });
   });
   
-  it('delete() should return empty object and delete configuration repository key', async () => {
+  it('delete() with key should return empty object and delete configuration repository key', async () => {
     expect.assertions(5);
-    expect(await configService.createRepository({ token, repository })).toEqual({ repository });
-    expect(await configService.save({ token, repository, key, value })).toEqual({});
-    expect(await configService.entries({ token, repository })).toEqual({ entries: [value] });
-    expect(await configService.delete({ token, repository, key })).toEqual({});
-    expect(await configService.entries({ token, repository })).toEqual({ entries: [] });
+    expect(await configService.createRepository({ repository })).toEqual({ repository });
+    expect(await configService.save({ repository, key, value })).toEqual({});
+    expect(await configService.entries({ repository })).toEqual({ entries: [{ key, value }] });
+    expect(await configService.delete({ repository, key })).toEqual({});
+    expect(await configService.entries({ repository })).toEqual({ entries: [] });
   });
-  
   
   it('entries() should return all values', async () => {
-    expect.assertions(3);
-    expect(await configService.createRepository({ token, repository })).toEqual({ repository });
-    expect(await configService.save({ token, repository, key, value })).toEqual({});
-    expect(await configService.entries({ token, repository })).toEqual({ entries: [value] });
+    expect.assertions(4);
+    expect(await configService.createRepository({ repository })).toEqual({ repository });
+    expect(await configService.save({ repository, key, value })).toEqual({});
+    expect(await configService.save({
+      repository, key: 'Surprise', value: 'I have a balloon'
+    })).toEqual({});
+    expect(await configService.entries({ repository })).toEqual({
+      entries: [{ key, value }, { key: 'Surprise', value: 'I have a balloon' }]
+    });
   });
   
   it('fetch() should return value by key', async () => {
     expect.assertions(3);
-    const configService = new ConfigurationServiceLocalStorage(token);
-    expect(await configService.createRepository({ token, repository })).toEqual({ repository });
-    expect(await configService.save({ token, repository, key, value })).toEqual({});
-    expect(await configService.fetch({ token, repository, key })).toEqual({ key, value });
+    expect(await configService.createRepository({ repository })).toEqual({ repository });
+    expect(await configService.save({ repository, key, value })).toEqual({});
+    expect(await configService.fetch({ repository, key })).toEqual({ key, value });
   });
   
   it('save() should persist value by key', async () => {
     expect.assertions(3);
-    expect(await configService.createRepository({ token, repository })).toEqual({ repository });
-    expect(await configService.save({ token, repository, key, value })).toEqual({});
-    expect(await configService.entries({ token, repository })).toEqual({ entries: [value] });
+    expect(await configService.createRepository({ repository })).toEqual({ repository });
+    expect(await configService.save({ repository, key, value })).toEqual({});
+    expect(await configService.entries({ repository })).toEqual({ entries: [{ key, value }] });
   });
   
 });

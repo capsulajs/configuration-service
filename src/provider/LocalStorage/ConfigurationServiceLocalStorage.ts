@@ -13,7 +13,11 @@ import {
 } from '../../api';
 
 export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationService<T> {
-  constructor(private token: string) {}
+  constructor(private token: string) {
+    if (!this.token) {
+      throw new Error('Configuration repository token not provided');
+    }
+  }
   
   private getRepository(repository: string) {
     const rawString = localStorage.getItem(`${this.token}.${repository}`);
@@ -32,10 +36,6 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
   }
 
   createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
-    if (!this.token) {
-      return Promise.reject(new Error('Configuration repository token not provided'))
-    }
-  
     if (!request.repository) {
       return Promise.reject(new Error('Configuration repository not provided'))
     }
@@ -61,7 +61,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
   
   entries(request: EntriesRequest): Promise<EntriesResponse<T>> {
     return this.getRepository(request.repository).then(repository => ({
-      entries: Object.keys(repository).map(key => repository[key])
+      entries: Object.keys(repository).map(key => ({ key, value: repository[key] }))
     }));
   };
 

@@ -16,7 +16,11 @@ import {
 const endpoint = '/io.scalecube.configuration.api.ConfigurationService';
 
 export class ConfigurationServiceHardcoreRemote<T=any> implements ConfigurationService<T> {
-  constructor(private token: string, private dispatcher: Dispatcher) {};
+  constructor(private token: string, private dispatcher: Dispatcher) {
+    if (!this.token) {
+      throw new Error('Configuration repository token not provided');
+    }
+  };
 
   private prepRequest(request: any): any {
     return {
