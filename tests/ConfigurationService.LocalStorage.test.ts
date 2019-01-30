@@ -1,6 +1,9 @@
-import { buildConfigurationServiceLocalStorage } from './utils/localStorageProvider';
+import { ConfigurationService } from 'api/ConfigurationService';
+import { ConfigurationServiceLocalStorage } from 'provider/LocalStorage';
 
 describe('Test suite for the LocalStorageProvider', () => {
+  
+  new ConfigurationServiceLocalStorage('token')
   
   const configKey = 'localStorageKey';
   const createConfigurationService = (defaultValues: any = null) => {
