@@ -1,6 +1,10 @@
 import {
   CreateRepositoryRequest,
   CreateRepositoryResponse,
+  DeleteRequest,
+  DeleteResponse,
+  EntriesRequest,
+  EntriesResponse,
   FetchRequest,
   FetchResponse,
   SaveRequest,
@@ -14,28 +18,28 @@ import {
 
 export interface ConfigurationService<T = any> {
   /**
-   * Creates a Configuration Repository
+   * This operation enable you to create the specified Repository for collecting and storing
+   * the relevant entries and requires a write permission level granted for owner role only
    */
   createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse>;
-
   /**
-   * Deletes the specified or deletes all the keys if no specified key
+   * This operation enable you to delete a specified entry (key) from the relevant Repository
+   * and requires a write level permission granted for owner either admin role only
    * @return an empty promise
    * */
-  delete(key?: string): Promise<void>;
-  
+  delete(request: DeleteRequest): Promise<DeleteResponse>;
+  /**
+   * This operation enable you to get all values (array of objects) by retrieving all the entries (keys)
+   * from the relevant Repository and enabled for each accessible permission level (read&write)
+   * granted for owner either admin or member role
+   * @return promise with array of the values of all of the keys
+   * */
+  entries(request: EntriesRequest): Promise<EntriesResponse<T>>;
   /**
    * Gets the value of the specified key
    * @return promise with the key's values
    * */
   fetch(request: FetchRequest): Promise<FetchResponse>;
-
-  /**
-   * Gets a list of the values of all of the keys
-   * @return promise with array of the values of all of the keys
-   * */
-  entries(): Promise<Array<T>>;
-  
   /**
    * Sets the value of the specified key
    * @return an empty promise

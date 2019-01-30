@@ -1,76 +1,75 @@
 import {
-  ConfigurationServiceBase,
+  ConfigurationService,
   CreateRepositoryRequest,
   CreateRepositoryResponse,
-  SetRequest,
-  SetResponse,
-  GetRequest,
-  GetResponse,
+  DeleteRequest,
+  DeleteResponse,
+  EntriesRequest,
+  EntriesResponse,
+  FetchRequest,
+  FetchResponse,
+  SaveRequest,
+  SaveResponse,
 } from '../../api';
 
-export class ConfigurationServiceLocalStorage<T=any> extends ConfigurationServiceBase<T> {
-  constructor(configName: string) {
-    super(configName);
-  }
-
-  private getConfig(): Promise<any> {
-    const stringValue = (localStorage.getItem(this.configName) || '').trim();
-    if (!stringValue) {
-      return Promise.reject(new Error('Configuration not found'));
+export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationService<T> {
+  constructor(private token: string) {}
+  
+  private getRepository(repository: string) {
+    const rawString = localStorage.getItem(`${this.token}.${repository}`);
+  
+    if (!rawString) {
+      return Promise.reject(
+        new Error(`Configuration repository ${repository} not found`)
+      );
     }
-
+  
     try {
-      return Promise.resolve(JSON.parse(stringValue));
-    } catch (err) {
-      return Promise.reject(err);
+      return Promise.resolve(JSON.parse(rawString));
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 
   createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
+    localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({}));
+    return Promise.resolve({ repository: request.repository });
+  }
+
+  delete(request: DeleteRequest): Promise<DeleteResponse> {
+    if (request.key) {
+      localStorage.removeItem(`${this.token}.${request.repository}.${request.key}`);
+    } else {
+      localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({}));
+    }
+  
     return Promise.resolve({});
   }
-
-  deleteAll() {
-    return Promise.resolve(localStorage.setItem(this.configName, JSON.stringify({})));
-  }
-
-  deleteKey(key: string) {
-    const { configName } = this;
-
-    return this.getConfig().then(config => {
-      localStorage.setItem(configName, JSON.stringify(delete config[key]));
-    });
-  }
-
-  get(request: GetRequest): Promise<GetResponse<T>> {
-    const { key } = request;
-
-    return this.getConfig().then(config =>
-      Object.keys(config).indexOf(key) >= 0 ?
-        Promise.resolve(config[key]) :
-        Promise.reject(new Error(`Configuration key ${key} not found`))
-    );
+  
+  entries(request: EntriesRequest): Promise<EntriesResponse<T>> {
+    return this.getRepository(request.repository).then(repository => ({
+      entries: Object.keys(repository).map(key => repository[key])
+    }));
   };
 
-  keys() {
-    return this.getConfig().then(config => Object.keys(config));
+  fetch(request: FetchRequest): Promise<FetchResponse> {
+    return this.getRepository(request.repository).then(repository =>
+      Object.keys(repository).indexOf(request.key) >= 0
+        ? Promise.resolve(repository[request.key])
+        : Promise.reject(new Error(`Configuration repository key ${request.key} not found`))
+      );
   }
 
-  set(request: SetRequest<T>): Promise<SetResponse> {
-    const { configName } = this;
-    const { key, value } = request;
-
-    this.getConfig().then(config =>
-      localStorage.setItem(configName, JSON.stringify({
-        ...config,
-        [key]: value
-      }))
-    );
-
-    return Promise.resolve({});
-  }
-
-  values<T>(): Promise<Array<T>> {
-    return this.getConfig().then(config => Object.keys(config).map(key => config[key]));
+  save(request: SaveRequest): Promise<SaveResponse> {
+    return new Promise((resolve, reject) => {
+      this.getRepository(request.repository).then((repository) => {
+        localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({
+          ...repository,
+          [request.key]: request.value
+        }));
+        
+        resolve({});
+      }).catch(reject);
+    });
   }
 }

@@ -4,46 +4,95 @@
 
  /**
   * Create Repository Request
-  * Authentication Token and the Repository Name are supposed to be added by the Service Method
+  * @token - The requested API key (token) which assigned with relevant role (permission level)
+  * @repository - Specified name of the repository
   */
 export interface CreateRepositoryRequest {
+  token: string;
+  repository: string;
 };
 
 /**
  * Create Repository Response
- * An empty object, just an acknowledgement
  */
-export interface CreateRepositoryResponse {
-};
+export interface CreateRepositoryResponse {};
 
+/**
+ * Delete Key Request
+ * @token - The requested API key (token) which assigned with relevant role (permission level)
+ * @repository - Specified name of the repository
+ * @key - Specified key name (entry) for relevant configuration setting in the repository
+ */
+export interface DeleteRequest {
+  token: string;
+  repository: string;
+  key?: string;
+}
+
+/**
+ * Delete Response
+ */
+export interface DeleteResponse {};
+
+/**
+ * Entries Request
+ * @token - The requested API key (token) which assigned with relevant role (permission level)
+ * @repository - Specified name of the repository
+ */
+export interface EntriesRequest {
+  token: string;
+  repository: string;
+}
+
+/**
+ * Entries Response
+ * @entries - List of all entries from the relevant configuration setting in the repository (Array of Objects)
+ * @key - Specified node name applied for relevant configuration settings in the repository
+ * @value - Specified key name (entry) for relevant configuration setting in the repository
+ */
+export interface EntriesResponse<T=any> {
+  entries: Array<T>,
+  key?: string;
+  value?: string;
+};
 
 /**
  * Fetch Value Request
+ * @token - The requested API key (token) which assigned with relevant role (permission level)
+ * @repository - Specified name of the repository
+ * @key - Specified key name (entry) for relevant configuration setting in the repository
  */
 export interface FetchRequest {
+  token: string;
+  repository: string;
   key: string;
 };
 
 /**
  * Fetch Value Response
+ * @key - Specified key name (entry) for relevant configuration setting in the repository
+ * @value - Specified node name applied for relevant configuration settings in the repository
  */
 export interface FetchResponse<T=any> {
+  key: string;
   value: T;
 };
 
 /**
  * Save Value Request
- * @key - Key
- * @value - Value
+ * @token - The requested API key (token) which assigned with relevant role (permission level)
+ * @repository - Specified name of the repository
+ * @key - Specified key name (entry) for relevant configuration setting in the repository
+ * @value - Specified node (entry) name applied for relevant configuration settings in the repository
  */
 export interface SaveRequest<T=any> {
+  token: string;
+  repository: string;
   key: string;
   value: T;
 };
 
 /**
  * Save Value Response
- * An empty object, just an acknowledgement
  */
-export interface SaveResponse {
-};
+export interface SaveResponse {};
