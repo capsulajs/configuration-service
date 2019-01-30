@@ -59,7 +59,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
   fetch(request: FetchRequest): Promise<FetchResponse> {
     return this.getRepository(request.repository).then(repository =>
       Object.keys(repository).indexOf(request.key) >= 0
-        ? Promise.resolve(repository[request.key])
+        ? Promise.resolve({ key: request.key, value: repository[request.key] })
         : Promise.reject(new Error(`Configuration repository key ${request.key} not found`))
       );
   }
