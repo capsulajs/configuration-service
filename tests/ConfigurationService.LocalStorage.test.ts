@@ -24,34 +24,28 @@ describe('Test suite for the LocalStorageProvider', () => {
     );
   });
   
-  it('When delete without any key should delete repository ', async () => {
+  it('When delete with key should delete repository key', async () => {
     expect.assertions(2);
     const configService = new ConfigurationServiceLocalStorage(token);
     await configService.createRepository({ token, repository: 'Adele' });
     await configService.save({ token, repository: 'Adele', key: 'Hello', value: 'It\'s me' });
-    const { entries } = await configService.entries({ token, repository: 'Adele' });
-    expect(entries.length).toBe(1);
+    expect(await configService.entries({ token, repository: 'Adele' })).toBe(['It\'s me']);
+    await configService.delete({ token, repository: 'Adele', key: 'Hello' });
+    expect(await configService.entries({ token, repository: 'Adele' })).toBe([]);
+  });
+  
+  it('When delete without key should delete repository', async () => {
+    expect.assertions(2);
+    const configService = new ConfigurationServiceLocalStorage(token);
+    await configService.createRepository({ token, repository: 'Adele' });
+    await configService.save({ token, repository: 'Adele', key: 'Hello', value: 'It\'s me' });
+    expect(await configService.entries({ token, repository: 'Adele' })).toBe(['It\'s me']);
     await configService.delete({ token, repository: 'Adele' });
     return configService.fetch({ token, repository: 'Adele' }).catch(
       error => expect(error).toEqual(new Error('Configuration repository Adele not found'))
     );
   });
-  //
-  // it('When deleteAll with a configuration values', async () => {
-  //   const configService = await createConfigurationService({ numValue: 1, stringValue: 'test' });
-  //   expect.assertions(1);
-  //   return expect(configService.deleteAll()).resolves.toBeUndefined();
-  // });
-  //
-  // it('When deleteKey removes a configuration key', async () => {
-  //   const configService = await createConfigurationService({ numValue: 1, stringValue: 'test' });
-  //   expect.assertions(1);
-  //   await configService.deleteKey(configKey);
-  //   return expect(configService.get({ key: configKey })).rejects.toEqual(
-  //     new Error(`Configuration key ${configKey} not found`)
-  //   );
-  // });
-  //
+  
   // it('When getting a value', async () => {
   //   const configService = await createConfigurationService({ numValue: 1, stringValue: 'test' });
   //   expect.assertions(1);

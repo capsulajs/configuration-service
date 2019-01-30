@@ -37,13 +37,17 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
   }
 
   delete(request: DeleteRequest): Promise<DeleteResponse> {
-    if (request.key) {
-      localStorage.removeItem(`${this.token}.${request.repository}.${request.key}`);
-    } else {
-      localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({}));
-    }
-  
-    return Promise.resolve({});
+    return new Promise((resolve, reject) => {
+      this.getRepository(request.repository).then((repository) => {
+        if (request.key) {
+          const { [request.key]: value, ...rest } = repository;
+          localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify(rest));
+        } else {
+          localStorage.removeItem(`${this.token}.${request.repository}`);
+        }
+        resolve({});
+      }).catch(reject);
+    });
   }
   
   entries(request: EntriesRequest): Promise<EntriesResponse<T>> {
