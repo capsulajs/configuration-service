@@ -4,11 +4,9 @@
 
  /**
   * Create Repository Request
-  * @token - The requested API key (token) which assigned with relevant role (permission level)
   * @repository - Specified name of the repository
   */
 export interface CreateRepositoryRequest {
-  token: string;
   repository: string;
 };
 
@@ -19,12 +17,10 @@ export interface CreateRepositoryResponse {};
 
 /**
  * Delete Key Request
- * @token - The requested API key (token) which assigned with relevant role (permission level)
  * @repository - Specified name of the repository
  * @key - Specified key name (entry) for relevant configuration setting in the repository
  */
 export interface DeleteRequest {
-  token: string;
   repository: string;
   key?: string;
 }
