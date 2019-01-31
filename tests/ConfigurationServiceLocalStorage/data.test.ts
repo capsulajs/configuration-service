@@ -51,4 +51,13 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     expect(await configService.entries({ repository })).toEqual({ entries: [{ key, value }] });
   });
   
+  it('save() should persist new value by the same key', async () => {
+    expect.assertions(5);
+    expect(await configService.createRepository({ repository })).toEqual({ repository });
+    expect(await configService.save({ repository, key, value })).toEqual({});
+    expect(await configService.entries({ repository })).toEqual({ entries: [{ key, value }] });
+    expect(await configService.save({ repository, key, value: 'Goodbye' })).toEqual({});
+    expect(await configService.entries({ repository })).toEqual({ entries: [{ key, value: 'Goodbye' }] });
+  });
+  
 });
