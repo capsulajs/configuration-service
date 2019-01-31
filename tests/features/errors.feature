@@ -40,12 +40,11 @@ Scenario: Call fetch() and save() without providing key should return 'repositor
     When  user calls one of the methods by providing repository name and without any key
     Then  user receives an error that the key is not provided
 
-Scenario: Call delete(), fetch() and save() with unexisting key should return 'Configuration repository key not found' error
+Scenario: Call delete(), fetch()  with unexisting key should return 'Configuration repository key not found' error
     Given configurationServiceLocalStorage with following methods
           |methods         |
           |delete          |
           |fetch           |
-          |save            |
     And   configurationServiceLocalStorage is created with a valid token
     And   an existing repository
     When  user calls one of the methods by providing an unexisting key
