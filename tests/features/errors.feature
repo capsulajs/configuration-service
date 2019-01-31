@@ -30,10 +30,9 @@ Scenario: Call delete(), fetch(), entries() and save() with unexisting repositor
     When  user calls one of the methods with unexisting repository name
     Then  user receives an error 'Configuration repository is not found'
 
-Scenario: Call delete(), fetch() and save() without providing key should return 'repositoryKeyNotProvided' error
+Scenario: Call fetch() and save() without providing key should return 'repositoryKeyNotProvided' error
     Given configurationServiceLocalStorage with following methods
           |methods         |
-          |delete          |
           |fetch           |
           |save            |
     And   configurationServiceLocalStorage is created with a valid token
