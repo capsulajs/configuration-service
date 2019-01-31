@@ -16,7 +16,7 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     expect(await configService.entries({ repository })).toEqual({ entries: [] });
   });
   
-  it('delete() with key should return empty object and delete configuration repository key', async () => {
+  it('delete() should return empty object and delete configuration repository key', async () => {
     expect.assertions(5);
     expect(await configService.createRepository({ repository })).toEqual({ repository });
     expect(await configService.save({ repository, key, value })).toEqual({});
@@ -25,7 +25,7 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     expect(await configService.entries({ repository })).toEqual({ entries: [] });
   });
   
-  it('entries() should return all values', async () => {
+  it('entries() should return all values and keys', async () => {
     expect.assertions(4);
     expect(await configService.createRepository({ repository })).toEqual({ repository });
     expect(await configService.save({ repository, key, value })).toEqual({});

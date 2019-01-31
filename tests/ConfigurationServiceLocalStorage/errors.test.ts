@@ -11,12 +11,12 @@ const configService = new ConfigurationServiceLocalStorage(token);
 describe('Test suite for the ConfigurationServiceLocalStorage', () => {
   beforeEach(localStorage.clear);
   
-  it('new instance of service should throw configuration repository token not provided error', async () => {
+  it('New instance of service should throw \'tokenNotProvided\' error', async () => {
     expect.assertions(1);
     expect(() => new ConfigurationServiceLocalStorage()).toThrow(new Error(messages.tokenNotProvided));
   });
 
-  it('should return configuration repository not provided error', async () => {
+  it('New instance should return \'repositoryNotProvided\' error', async () => {
     expect.assertions(5);
     ['createRepository', 'delete', 'entries', 'fetch', 'save'].forEach((method) => {
       configService[method]({}).catch(
@@ -33,7 +33,8 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     );
   });
 
-  it('should return configuration repository not found error', async () => {
+  it('Call delete(), fetch(), entries() and save() with unexisting repository should' +
+     'return \'Configuration repository is not found\' error', async () => {
     expect.assertions(4);
     ['delete', 'entries', 'fetch', 'save'].forEach((method) => {
       configService[method]({ repository, key }).catch(
@@ -42,7 +43,7 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     });
   });
 
-  it('should return configuration repository key not provided error', async () => {
+  it('Call fetch() and save() without providing key should return \'repositoryKeyNotProvided\' error', async () => {
     expect.assertions(2);
     await configService.createRepository({ repository });
     ['fetch', 'save'].forEach((method) => {
@@ -52,7 +53,8 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     });
   });
   
-  it('should return configuration repository key not found error', async () => {
+  it('Call delete(), fetch()  with unexisting key should' +
+     'return \'Configuration repository key not found\' error', async () => {
     expect.assertions(2);
     await configService.createRepository({ repository });
     ['delete', 'fetch'].forEach((method) => {
@@ -62,7 +64,7 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     });
   });
   
-  it('delete() without key should return empty object and delete configuration repository key', async () => {
+  it('delete() without key should delete configuration repository', async () => {
     expect.assertions(5);
     expect(await configService.createRepository({ repository })).toEqual({ repository });
     expect(await configService.save({ repository, key, value })).toEqual({});
