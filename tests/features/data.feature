@@ -1,4 +1,6 @@
 Feature: Data tests for the ConfigurationServiceLocalStorage
+Background:
+  Given ConfigurationServiceLocalStorage is created with a valid token
 
 Scenario: createRepository() should create configuration repository
   Given ConfigurationServiceLocalStorage with createRepository method
@@ -27,4 +29,4 @@ Scenario: fetch() should return value by key
    Given configurationServiceLocalStorage with save method
    And   an existing repository
    When  user calls save method with key: X and value: Y and the name of this repository
-   Then  specific entry (key and the value) is saved in the  repository
+   Then  specific entry (key and the value) is saved in the repository
