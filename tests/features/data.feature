@@ -7,12 +7,6 @@ Scenario: createRepository() should create configuration repository
   When  user calls createRepository method by providing the token and the name of repository
   Then  a new empty repository is created with the provided name
 
-Scenario: createRepository() providing an existing repository name should rewrite the existing configuration repository
-  Given ConfigurationServiceLocalStorage with createRepository method
-  And   an existing repository
-  When  user calls createRepository method by providing the token and the existing name of repository
-  Then  the existing repository is rewritten with the provided token
-
 Scenario: delete() should return empty object and delete configuration repository key
   Given  ConfigurationServiceLocalStorage with delete method
   And    an existing repository containing an entry with key:X
