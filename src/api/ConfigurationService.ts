@@ -1,36 +1,48 @@
+import {
+  CreateRepositoryRequest,
+  CreateRepositoryResponse,
+  DeleteRequest,
+  DeleteResponse,
+  EntriesRequest,
+  EntriesResponse,
+  FetchRequest,
+  FetchResponse,
+  SaveRequest,
+  SaveResponse
+} from '.';
+
 /**
  * Interface of the ConfigurationService
+ * Type Parameter T specifies the type of the key values
  */
 
-export interface ConfigurationService {
+export interface ConfigurationService<T = any> {
   /**
-   * The method provides the deletion of all configuration keys
-   * @return empty promise
-   * */
-  deleteAll(): Promise<void>;
+   * This operation enable you to create the specified Repository for collecting and storing
+   * the relevant entries and requires a write permission level granted for owner role only
+   */
+  createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse>;
   /**
-   * The method provides the deletion of configuration by specific key
-   * @return empty promise
+   * This operation enable you to delete a specified entry (key) from the relevant Repository
+   * and requires a write level permission granted for owner either admin role only
+   * @return an empty promise
    * */
-  deleteKey(key: string): Promise<void>;
+  delete(request: DeleteRequest): Promise<DeleteResponse>;
   /**
-   * The method provides the configuration by specific key
-   * @return promise with configuration object
+   * This operation enable you to get all values (array of objects) by retrieving all the entries (keys)
+   * from the relevant Repository and enabled for each accessible permission level (read&write)
+   * granted for owner either admin or member role
+   * @return promise with array of the values of all of the keys
    * */
-  get<T>(key: string): Promise<T>;
+  entries(request: EntriesRequest): Promise<EntriesResponse<T>>;
   /**
-   * The method provides the list of configuration keys
-   * @return promise string array
+   * Gets the value of the specified key
+   * @return promise with the key's values
    * */
-  keys(): Promise<Array<string>>;
+  fetch(request: FetchRequest): Promise<FetchResponse>;
   /**
-   * The method provides the setting of configuration by specific key
-   * @return empty promise
+   * Sets the value of the specified key
+   * @return an empty promise
    * */
-  set<T>(key: string, value: T): Promise<void>;
-  /**
-   * The method provides the getting of configurations by specific key
-   * @return promise with array of configuration objects by all keys
-   * */
-  values<T>(): Promise<Array<T>>;
+  save(request: SaveRequest): Promise<SaveResponse>;
 };
