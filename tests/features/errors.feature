@@ -60,3 +60,8 @@ Scenario: delete() without key should delete configuration repository
     When  user calls entries method with the name of the repository that was deleted
     Then  user receives an error 'Configuration repository is not found'
 
+Scenario: createRepository() providing an existing repository nname should return 'repositoryAlreadyExists' error
+  Given ConfigurationServiceLocalStorage with createRepository method
+  And   an existing repository
+  When  user calls createRepository method by providing the token and the existing name of repository
+  Then  user receives an error that the repository already exists
