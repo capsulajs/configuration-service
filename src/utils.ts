@@ -3,5 +3,6 @@ export const repositoryKeyRequestValidator = (request: any) => request.key === u
 export const messages = {
   tokenNotProvided: 'Configuration repository token not provided',
   repositoryNotProvided: 'Configuration repository not provided',
-  repositoryKeyNotProvided: 'Configuration repository key not provided'
+  repositoryKeyNotProvided: 'Configuration repository key not provided',
+  repositoryAlreadyExists: 'Configuration repository already exists'
 };

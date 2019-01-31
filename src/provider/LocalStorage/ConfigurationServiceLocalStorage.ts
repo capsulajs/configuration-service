@@ -22,7 +22,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
   
   private getRepository(repository: string) {
     const rawString = localStorage.getItem(`${this.token}.${repository}`);
-  
+    
     if (!rawString) {
       return Promise.reject(
         new Error(`Configuration repository ${repository} not found`)
@@ -41,8 +41,14 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
     
-    localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({}));
-    return Promise.resolve({ repository: request.repository });
+    return new Promise((resolve, reject) => {
+      this.getRepository(request.repository).then(() => {
+        reject(new Error(messages.repositoryAlreadyExists));
+      }).catch(() => {
+        localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({}));
+        return resolve({ repository: request.repository });
+      });
+    });
   }
 
   delete(request: DeleteRequest): Promise<DeleteResponse> {
@@ -53,11 +59,16 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     return new Promise((resolve, reject) => {
       this.getRepository(request.repository).then((repository) => {
         if (request.key) {
+          if (!repository.hasOwnProperty(request.key)) {
+            reject(new Error(`Configuration repository key ${request.key} not found`));
+          }
+  
           const { [request.key]: value, ...rest } = repository;
           localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify(rest));
         } else {
           localStorage.removeItem(`${this.token}.${request.repository}`);
         }
+        
         resolve({});
       }).catch(reject);
     });
@@ -82,11 +93,13 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
       return Promise.reject(new Error(messages.repositoryKeyNotProvided));
     }
     
-    return this.getRepository(request.repository).then(repository =>
-      Object.keys(repository).indexOf(request.key) >= 0
-        ? Promise.resolve({ key: request.key, value: repository[request.key] })
-        : Promise.reject(new Error(`Configuration repository key ${request.key} not found`))
-      );
+    return new Promise((resolve, reject) => {
+      this.getRepository(request.repository).then(repository =>
+        Object.keys(repository).indexOf(request.key) >= 0
+          ? resolve({ key: request.key, value: repository[request.key] })
+          : reject(new Error(`Configuration repository key ${request.key} not found`))
+      ).catch(reject);
+    });
   }
 
   save(request: SaveRequest): Promise<SaveResponse> {

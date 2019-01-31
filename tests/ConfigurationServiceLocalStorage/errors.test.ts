@@ -16,10 +16,49 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     expect(() => new ConfigurationServiceLocalStorage()).toThrow(new Error(messages.tokenNotProvided));
   });
 
-  it('new instance should return configuration repository not provided error', async () => {
+  it('should return configuration repository not provided error', async () => {
     expect.assertions(5);
     ['createRepository', 'delete', 'entries', 'fetch', 'save'].forEach((method) => {
-      configService[method]({}).catch(error => expect(error).toEqual(messages.repositoryNotProvided));
+      configService[method]({}).catch(
+        error => expect(error).toEqual(new Error(messages.repositoryNotProvided))
+      );
+    });
+  });
+  
+  it('should return configuration repository already exists error', async () => {
+    expect.assertions(1);
+    await configService.createRepository({ repository });
+    configService.createRepository({ repository }).catch(
+      error => expect(error).toEqual(new Error(messages.repositoryAlreadyExists))
+    );
+  });
+
+  it('should return configuration repository not found error', async () => {
+    expect.assertions(4);
+    ['delete', 'entries', 'fetch', 'save'].forEach((method) => {
+      configService[method]({ repository, key }).catch(
+        error => expect(error).toEqual(new Error(`Configuration repository ${repository} not found`))
+      );
+    });
+  });
+
+  it('should return configuration repository key not provided error', async () => {
+    expect.assertions(2);
+    await configService.createRepository({ repository });
+    ['fetch', 'save'].forEach((method) => {
+      configService[method]({ repository }).catch(
+        error => expect(error).toEqual(new Error(messages.repositoryKeyNotProvided))
+      );
+    });
+  });
+  
+  it('should return configuration repository key not found error', async () => {
+    expect.assertions(2);
+    await configService.createRepository({ repository });
+    ['delete', 'fetch'].forEach((method) => {
+      configService[method]({ repository, key }).catch(
+        error => expect(error).toEqual(new Error(`Configuration repository key ${key} not found`))
+      );
     });
   });
   
@@ -31,37 +70,6 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     expect(await configService.delete({ repository })).toEqual({});
     configService.entries({ repository }).catch(
       error => expect(error).toEqual(new Error(`Configuration repository ${repository} not found`))
-    );
-  });
-
-  it('fetch() should return configuration repository key not provided error', async () => {
-    expect.assertions(2);
-    expect(await configService.createRepository({ repository })).toEqual({ repository });
-    configService.fetch({ repository }).catch(
-      error => expect(error).toEqual(new Error(messages.repositoryKeyNotProvided))
-    );
-  });
-
-  it('fetch() should return not found configuration repository error', async () => {
-    expect.assertions(1);
-    return configService.fetch({ repository, key }).catch(
-      error => expect(error).toEqual(new Error(`Configuration repository ${repository} not found`))
-    );
-  });
-
-  it('fetch() should return not found configuration repository key error', async () => {
-    expect.assertions(2);
-    expect(await configService.createRepository({ repository })).toEqual({ repository });
-    return configService.fetch({ repository, key }).catch(
-      error => expect(error).toEqual(new Error(`Configuration repository key ${key} not found`))
-    );
-  });
-  
-  it('save() should return configuration repository key not provided error', async () => {
-    expect.assertions(2);
-    expect(await configService.createRepository({ repository })).toEqual({ repository });
-    return configService.save({ repository }).catch(
-      error => expect(error).toEqual(new Error(messages.repositoryKeyNotProvided))
     );
   });
   
