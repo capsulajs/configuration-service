@@ -15,27 +15,27 @@ describe('Test suite for the ConfigurationServiceFile', () => {
     expect(() => new ConfigurationServiceFile()).toThrow(new Error(messages.filenameNotProvided));
   });
   
-  it('New instance of service should throw \'fileNotExist\' error', async () => {
+  it('New instance of service should throw \'fileOrDirectoryNotExist\' error', async () => {
     expect.assertions(1);
     expect(() => new ConfigurationServiceFile('test.conf.not.exist.json'))
       .toThrow(new Error(messages.fileOrDirectoryNotExist));
   });
 
-  // it('New instance of service should throw \'fileNotExist\' error', async () => {
-  //   expect.assertions(1);
-  //   expect(() => new ConfigurationServiceFile('test.conf.not.valid.json'))
-  //     .toThrow(new Error(messages.fileNotValid));
-  // });
-  //
-  // it('New instance should return \'repositoryNotProvided\' error', async () => {
-  //   expect.assertions(2);
-  //   ['entries', 'fetch'].forEach((method) => {
-  //     configService[method]({}).catch(
-  //       error => expect(error).toEqual(new Error(messages.repositoryNotProvided))
-  //     );
-  //   });
-  // });
-  //
+  it('New instance of service should throw \'fileNotValid\' error', async () => {
+    expect.assertions(1);
+    expect(() => new ConfigurationServiceFile('test.conf.not.valid.json'))
+      .toThrow(new Error(messages.fileNotValid));
+  });
+
+  it('New instance should return \'repositoryNotProvided\' error', async () => {
+    expect.assertions(2);
+    ['entries', 'fetch'].forEach((method) => {
+      configService[method]({}).catch(
+        error => expect(error).toEqual(new Error(messages.repositoryNotProvided))
+      );
+    });
+  });
+
   // it('Call fetch(), entries() with unexisting repository should' +
   //   'return \'Configuration repository is not found\' error', async () => {
   //   expect.assertions(2);
