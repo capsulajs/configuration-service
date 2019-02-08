@@ -1,10 +1,6 @@
 {
-  "testRepository": {
-    "develop": {
-      "hello": "It's me"
-    },
-    "master": {
-      "Surprise": "I have a balloon"
-    }
+  "Adele": {
+    "Hello": "It's me",
+    "Surprise": "I have a balloon"
   }
 }
