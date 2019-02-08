@@ -15,16 +15,18 @@ import {
 import { messages, repositoryRequestValidator, repositoryKeyRequestValidator } from '../../utils';
 
 export class ConfigurationServiceFile<T=any> implements ConfigurationService<T> {
+  private file: string;
+  
   constructor(private filename: string) {
     if (!this.filename) {
       throw new Error(messages.filenameNotProvided);
     }
     
-    fs.open(filename,'r',function(err) {
-      if (err) {
-        throw new Error(messages.fileNotExist);
-      }
-    });
+    try {
+      this.file = fs.readFileSync(filename,'utf8');
+    } catch {
+      throw new Error(messages.fileNotExist);
+    }
   }
   
   createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {

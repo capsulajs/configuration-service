@@ -2,36 +2,40 @@ import { ConfigurationService } from 'api/ConfigurationService';
 import { ConfigurationServiceFile } from 'provider/FileProvider';
 import { messages } from '../../src/utils';
 
-const token = 'token';
+const filename = 'test.conf.json';
 const repository = 'Adele';
 const key = 'Hello';
 const value = 'It\'s me';
-// const configService = new ConfigurationServiceFile(token);
+const configService = new ConfigurationServiceFile(filename);
 
 describe('Test suite for the ConfigurationServiceFile', () => {
-  // beforeEach(localStorage.clear);
   
   it('New instance of service should throw \'filenameNotProvided\' error', async () => {
     expect.assertions(1);
     expect(() => new ConfigurationServiceFile()).toThrow(new Error(messages.filenameNotProvided));
   });
   
-  // it('New instance should return \'repositoryNotProvided\' error', async () => {
-  //   expect.assertions(5);
-  //   ['createRepository', 'delete', 'entries', 'fetch', 'save'].forEach((method) => {
-  //     configService[method]({}).catch(
-  //       error => expect(error).toEqual(new Error(messages.repositoryNotProvided))
-  //     );
-  //   });
-  // });
-  //
-  // it('should return configuration repository already exists error', async () => {
-  //   expect.assertions(1);
-  //   await configService.createRepository({ repository });
-  //   configService.createRepository({ repository }).catch(
-  //     error => expect(error).toEqual(new Error(messages.repositoryAlreadyExists))
-  //   );
-  // });
+  it('New instance of service should throw \'fileNotExist\' error', async () => {
+    expect.assertions(1);
+    expect(() => new ConfigurationServiceFile('wrong.file.json')).toThrow(new Error(messages.fileNotExist));
+  });
+  
+  it('New instance should return \'repositoryNotProvided\' error', async () => {
+    expect.assertions(2);
+    ['entries', 'fetch'].forEach((method) => {
+      configService[method]({}).catch(
+        error => expect(error).toEqual(new Error(messages.repositoryNotProvided))
+      );
+    });
+  });
+
+  it('should return configuration repository already exists error', async () => {
+    expect.assertions(1);
+    await configService.createRepository({ repository });
+    configService.createRepository({ repository }).catch(
+      error => expect(error).toEqual(new Error(messages.repositoryAlreadyExists))
+    );
+  });
   //
   // it('Call delete(), fetch(), entries() and save() with unexisting repository should' +
   //   'return \'Configuration repository is not found\' error', async () => {
