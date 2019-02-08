@@ -17,36 +17,40 @@ describe('Test suite for the ConfigurationServiceFile', () => {
   
   it('New instance of service should throw \'fileNotExist\' error', async () => {
     expect.assertions(1);
-    expect(() => new ConfigurationServiceFile('wrong.file.json')).toThrow(new Error(messages.fileNotExist));
-  });
-  
-  it('New instance should return \'repositoryNotProvided\' error', async () => {
-    expect.assertions(2);
-    ['entries', 'fetch'].forEach((method) => {
-      configService[method]({}).catch(
-        error => expect(error).toEqual(new Error(messages.repositoryNotProvided))
-      );
-    });
+    expect(() => new ConfigurationServiceFile('test.conf.not.exist.json'))
+      .toThrow(new Error(messages.fileOrDirectoryNotExist));
   });
 
-  it('should return configuration repository already exists error', async () => {
-    expect.assertions(1);
-    await configService.createRepository({ repository });
-    configService.createRepository({ repository }).catch(
-      error => expect(error).toEqual(new Error(messages.repositoryAlreadyExists))
-    );
-  });
+  // it('New instance of service should throw \'fileNotExist\' error', async () => {
+  //   expect.assertions(1);
+  //   expect(() => new ConfigurationServiceFile('test.conf.not.valid.json'))
+  //     .toThrow(new Error(messages.fileNotValid));
+  // });
   //
-  // it('Call delete(), fetch(), entries() and save() with unexisting repository should' +
+  // it('New instance should return \'repositoryNotProvided\' error', async () => {
+  //   expect.assertions(2);
+  //   ['entries', 'fetch'].forEach((method) => {
+  //     configService[method]({}).catch(
+  //       error => expect(error).toEqual(new Error(messages.repositoryNotProvided))
+  //     );
+  //   });
+  // });
+  //
+  // it('Call fetch(), entries() with unexisting repository should' +
   //   'return \'Configuration repository is not found\' error', async () => {
-  //   expect.assertions(4);
-  //   ['delete', 'entries', 'fetch', 'save'].forEach((method) => {
+  //   expect.assertions(2);
+  //   ['entries', 'fetch'].forEach((method) => {
   //     configService[method]({ repository, key }).catch(
   //       error => expect(error).toEqual(new Error(`Configuration repository ${repository} not found`))
   //     );
   //   });
   // });
-  //
+  
+  
+  
+  
+  
+  
   // it('Call fetch() and save() without providing key should return \'repositoryKeyNotProvided\' error', async () => {
   //   expect.assertions(2);
   //   await configService.createRepository({ repository });
