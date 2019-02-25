@@ -1,5 +1,4 @@
 import { Dispatcher, AxiosDispatcher } from '@capsulajs/capsulajs-transport-providers';
-import { ConfigurationService } from 'api/ConfigurationService';
 import { ConfigurationServiceHttp } from 'provider/HttpProvider';
 
 const endpoint = 'http://localhost:1234';
