@@ -2,8 +2,8 @@ import { ConfigurationService } from 'api/ConfigurationService';
 import { ConfigurationServiceFile } from 'provider/FileProvider';
 import { messages } from '../../src/utils';
 
-const token = 'test.conf.json';
-const repository = 'Adele';
+const token = 'test';
+const repository = 'repository.json';
 const notFoundRepository = 'Freddie Mercury';
 const key = 'Hello';
 const notFoundKey = 'Goodbye';

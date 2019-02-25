@@ -24,7 +24,7 @@ export class ConfigurationServiceFile<T=any> implements ConfigurationService<T> 
 
   private getRepository(repository: string) {
     try {
-      return Promise.resolve(JSON.parse(fs.readFileSync(this.token, 'utf8')) as Repository);
+      return Promise.resolve(JSON.parse(fs.readFileSync(`${this.token}.${repository}`, 'utf8')) as Repository);
     } catch {
       return Promise.reject(new Error(`Configuration repository ${repository} not found`));
     }
@@ -62,7 +62,7 @@ export class ConfigurationServiceFile<T=any> implements ConfigurationService<T> 
         Object.keys(repository).indexOf(request.key) >= 0
           ? resolve({ key: request.key, value: repository[request.key] })
           : reject(new Error(`Configuration repository key ${request.key} not found`))
-      ).catch(error => reject(error));
+      ).catch(reject);
     });
   }
 

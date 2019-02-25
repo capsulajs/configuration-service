@@ -1,6 +1,7 @@
 import { ConfigurationService, CreateRepositoryRequest, CreateRepositoryResponse, DeleteRequest, DeleteResponse, EntriesRequest, EntriesResponse, FetchRequest, FetchResponse, SaveRequest, SaveResponse } from '../../api';
-export declare class ConfigurationServiceFile<T = any> implements ConfigurationService<T> {
+export declare class ConfigurationServiceHttp implements ConfigurationService {
     private token;
+    private dispatcher;
     constructor(token: string);
     private getRepository;
     createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse>;

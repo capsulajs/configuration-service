@@ -1,8 +1,8 @@
 import { ConfigurationService } from 'api/ConfigurationService';
 import { ConfigurationServiceFile } from 'provider/FileProvider';
 
-const token = 'test.conf.json';
-const repository = 'Adele';
+const token = 'test';
+const repository = 'repository.json';
 const key = 'Hello';
 const value = 'It\'s me';
 const configService = new ConfigurationServiceFile(token);
