@@ -21,7 +21,7 @@ describe('Test suite for the ConfigurationServiceHttp', () => {
 
   it('New instance of service should throw \'dispatcherNotProvided\' error', async () => {
     expect.assertions(1);
-    expect(() => new ConfigurationServiceHttp()).toThrow(new Error(messages.tokenNotProvided));
+    return expect(() => new ConfigurationServiceHttp()).toThrow(new Error(messages.tokenNotProvided));
   });
 
   it('New instance should return \'repositoryNotProvided\' error', async () => {

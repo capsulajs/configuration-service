@@ -10,10 +10,10 @@ const configService = new ConfigurationServiceLocalStorage(token);
 
 describe('Test suite for the ConfigurationServiceLocalStorage', () => {
   beforeEach(localStorage.clear);
-  
+
   it('New instance of service should throw \'tokenNotProvided\' error', async () => {
     expect.assertions(1);
-    expect(() => new ConfigurationServiceLocalStorage()).toThrow(new Error(messages.tokenNotProvided));
+    return expect(() => new ConfigurationServiceLocalStorage()).toThrow(new Error(messages.tokenNotProvided));
   });
 
   it('New instance should return \'repositoryNotProvided\' error', async () => {
@@ -24,7 +24,7 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
       );
     });
   });
-  
+
   it('should return configuration repository already exists error', async () => {
     expect.assertions(1);
     await configService.createRepository({ repository });
@@ -52,7 +52,7 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
       );
     });
   });
-  
+
   it('Call delete(), fetch()  with unexisting key should' +
      'return \'Configuration repository key not found\' error', async () => {
     expect.assertions(2);
@@ -63,7 +63,7 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
       );
     });
   });
-  
+
   it('delete() without key should delete configuration repository', async () => {
     expect.assertions(5);
     expect(await configService.createRepository({ repository })).toEqual({ repository });
@@ -74,5 +74,5 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
       error => expect(error).toEqual(new Error(`Configuration repository ${repository} not found`))
     );
   });
-  
+
 });

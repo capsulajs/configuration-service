@@ -46,7 +46,7 @@ export class ConfigurationServiceHttp implements ConfigurationService {
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
 
-    return this.getRepository(request.repository).then((repository: any) => ({
+    return this.getRepository(request.repository).then((repository: Repository) => ({
       entries: Object.keys(repository).map(key => ({ key, value: repository[key] }))
     }));
   };

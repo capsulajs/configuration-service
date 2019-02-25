@@ -13,7 +13,7 @@ describe('Test suite for the ConfigurationServiceFile', () => {
 
   it('New instance of service should throw \'tokenNotProvided\' error', async () => {
     expect.assertions(1);
-    expect(() => new ConfigurationServiceFile()).toThrow(new Error(messages.tokenNotProvided));
+    return expect(() => new ConfigurationServiceFile()).toThrow(new Error(messages.tokenNotProvided));
   });
 
   it('New instance should return \'repositoryNotProvided\' error', async () => {
