@@ -17,15 +17,15 @@ import { messages, repositoryRequestValidator, repositoryKeyRequestValidator } f
 export class ConfigurationServiceHttp<T=any> implements ConfigurationService<T> {
   private storage: any;
 
-  constructor(private endpoint: string, private dispatcher: Dispatcher) {
-    if (!this.endpoint) {
-      throw new Error(messages.endpointNotProvided);
+  constructor(private dispatcher: Dispatcher) {
+    if (!this.dispatcher) {
+      throw new Error(messages.dispatcherNotProvided);
     }
   }
 
   private getRepository(repository: string) {
     return new Promise((resolve, reject) => {
-      this.dispatcher.dispatch(this.endpoint, {}).then((storage: any) => {
+      this.dispatcher.dispatch('/', {}).then((storage: any) => {
         storage[repository]
           ? resolve(storage[repository])
           : reject(new Error(`Configuration repository ${repository} not found`));

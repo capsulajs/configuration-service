@@ -15,7 +15,7 @@ const data = {
 const dispatcher: Dispatcher = new AxiosDispatcher(endpoint);
 const mock = jest.fn();
 dispatcher.dispatch = mock;
-const configService = new ConfigurationServiceHttp(endpoint, dispatcher);
+const configService = new ConfigurationServiceHttp(dispatcher);
 
 describe('Test suite for the ConfigurationServiceHttp', () => {
   it('entries() should return all values and keys', async () => {
