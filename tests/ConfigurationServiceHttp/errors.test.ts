@@ -1,6 +1,7 @@
 import { Dispatcher, AxiosDispatcher } from '@capsulajs/capsulajs-transport-providers';
 import { ConfigurationServiceHttp } from 'provider/HttpProvider';
 import { messages } from '../../src/utils';
+import { runTestsExpectRejectedError } from '../utils';
 
 const token = 'localhost:1234';
 const repository = 'Adele';
@@ -34,23 +35,27 @@ describe('Test suite for the ConfigurationServiceHttp', () => {
   });
 
   it('Call fetch(), entries() with unexisting repository should' +
-    ' return \'Configuration repository is not found\' error', async () => {
-    expect.assertions(2);
-    ['entries', 'fetch'].forEach((method) => {
-      mock.mockRejectedValueOnce(null);
-      configService[method]({ repository: notFoundRepository, key }).catch(
-        error => expect(error).toEqual(new Error(`Configuration repository ${notFoundRepository} not found`))
-      );
-    });
+    ' return \'Configuration repository is not found\' error', (done) => {
+    runTestsExpectRejectedError(
+      configService,
+      ['entries', 'fetch'],
+      { repository: notFoundRepository, key },
+      new Error(`Configuration repository ${notFoundRepository} not found`),
+      expect,
+      done,
+      () => mock.mockRejectedValueOnce(null)
+    );
   });
 
-  it('Call fetch() without providing key should return \'repositoryKeyNotProvided\' error', async () => {
-    expect.assertions(1);
-    ['fetch'].forEach((method) => {
-      configService[method]({ repository }).catch(
-        error => expect(error).toEqual(new Error(messages.repositoryKeyNotProvided))
-      );
-    });
+  it('Call fetch() without providing key should return \'repositoryKeyNotProvided\' error', (done) => {
+    runTestsExpectRejectedError(
+      configService,
+      ['fetch'],
+      { repository },
+      new Error(messages.repositoryKeyNotProvided),
+      expect,
+      done
+    );
   });
 
   it('Call fetch()  with unexisting key should' +
