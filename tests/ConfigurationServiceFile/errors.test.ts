@@ -1,6 +1,7 @@
 import { ConfigurationService } from 'api/ConfigurationService';
 import { ConfigurationServiceFile } from 'provider/FileProvider';
 import { messages } from '../../src/utils';
+import { runTestsRejectedError } from '../utils';
 
 const token = 'test';
 const repository = 'repository.json';
@@ -16,42 +17,40 @@ describe('Test suite for the ConfigurationServiceFile', () => {
     return expect(() => new ConfigurationServiceFile()).toThrow(new Error(messages.tokenNotProvided));
   });
 
-  it('New instance should return \'repositoryNotProvided\' error', async () => {
-    expect.assertions(2);
-    ['entries', 'fetch'].forEach((method) => {
-      configService[method]({}).catch(
-        error => expect(error).toEqual(new Error(messages.repositoryNotProvided))
-      );
-    });
+  it('New instance should return \'repositoryNotProvided\' error', (done) => {
+    runTestsRejectedError(expect, done)(
+      configService,
+      ['entries', 'fetch'],
+      {},
+      new Error(messages.repositoryNotProvided)
+    );
   });
 
-  it('Call fetch(), entries() with unexisting repository should' +
-    ' return \'Configuration repository is not found\' error', async () => {
-    expect.assertions(2);
-    ['entries', 'fetch'].forEach((method) => {
-      configService[method]({ repository: notFoundRepository, key }).catch(
-        error => expect(error).toEqual(new Error(`Configuration repository ${notFoundRepository} not found`))
-      );
-    });
+  it('Call fetch(), entries() with unexisting repository should return \'repository is not found\' error', (done) => {
+    runTestsRejectedError(expect, done)(
+      configService,
+      ['entries', 'fetch'],
+      { repository: notFoundRepository, key },
+      new Error(`Configuration repository ${notFoundRepository} not found`)
+    );
   });
 
-  it('Call fetch() without providing key should return \'repositoryKeyNotProvided\' error', async () => {
-    expect.assertions(1);
-    ['fetch'].forEach((method) => {
-      configService[method]({ repository }).catch(
-        error => expect(error).toEqual(new Error(messages.repositoryKeyNotProvided))
-      );
-    });
+  it('Call fetch() without providing key should return \'repositoryKeyNotProvided\' error', (done) => {
+    runTestsRejectedError(expect, done)(
+      configService,
+      ['fetch'],
+      { repository },
+      new Error(messages.repositoryKeyNotProvided)
+    );
   });
 
-  it('Call fetch()  with unexisting key should' +
-    'return \'Configuration repository key not found\' error', async () => {
-    expect.assertions(1);
-    ['fetch'].forEach((method) => {
-      configService[method]({ repository, key: notFoundKey }).catch(
-        error => expect(error).toEqual(new Error(`Configuration repository key ${notFoundKey} not found`))
-      );
-    });
+  it('Call fetch()  with unexisting key should return \'repository key not found\' error', (done) => {
+    runTestsRejectedError(expect, done)(
+      configService,
+      ['fetch'],
+      { repository, key: notFoundKey },
+      new Error(`Configuration repository key ${notFoundKey} not found`)
+    );
   });
 
 });

@@ -6,13 +6,14 @@ export const expectWithFailNow = (expect, done) => {
   }
 };
 
-export const runTestsExpectRejectedError = (
+export const runTestsRejectedError = (
+  expect,
+  done
+) => (
   service,
   methods,
   request,
   response,
-  expect,
-  done,
   beforeEach = null
 ) => {
   expect.assertions(methods.length);

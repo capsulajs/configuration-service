@@ -1,7 +1,7 @@
 import { Dispatcher, AxiosDispatcher } from '@capsulajs/capsulajs-transport-providers';
 import { ConfigurationServiceHttp } from 'provider/HttpProvider';
 import { messages } from '../../src/utils';
-import { runTestsExpectRejectedError } from '../utils';
+import { runTestsRejectedError } from '../utils';
 
 const token = 'localhost:1234';
 const repository = 'Adele';
@@ -20,53 +20,47 @@ configService.dispatcher.dispatch = mock;
 
 describe('Test suite for the ConfigurationServiceHttp', () => {
 
-  it('New instance of service should throw \'dispatcherNotProvided\' error', async () => {
+  it('New instance of service should throw \'dispatcherNotProvided\' error', () => {
     expect.assertions(1);
     return expect(() => new ConfigurationServiceHttp()).toThrow(new Error(messages.tokenNotProvided));
   });
 
-  it('New instance should return \'repositoryNotProvided\' error', async () => {
-    expect.assertions(2);
-    ['entries', 'fetch'].forEach((method) => {
-      configService[method]({}).catch(
-        error => expect(error).toEqual(new Error(messages.repositoryNotProvided))
-      );
-    });
+  it('New instance should return \'repositoryNotProvided\' error', (done) => {
+    runTestsRejectedError(expect, done)(
+      configService,
+      ['entries', 'fetch'],
+      {},
+      new Error(messages.repositoryNotProvided)
+    );
   });
 
-  it('Call fetch(), entries() with unexisting repository should' +
-    ' return \'Configuration repository is not found\' error', (done) => {
-    runTestsExpectRejectedError(
+  it('Call fetch(), entries() with unexisting repository should return \'repository not found\' error', (done) => {
+    runTestsRejectedError(expect, done)(
       configService,
       ['entries', 'fetch'],
       { repository: notFoundRepository, key },
       new Error(`Configuration repository ${notFoundRepository} not found`),
-      expect,
-      done,
       () => mock.mockRejectedValueOnce(null)
     );
   });
 
   it('Call fetch() without providing key should return \'repositoryKeyNotProvided\' error', (done) => {
-    runTestsExpectRejectedError(
+    runTestsRejectedError(expect, done)(
       configService,
       ['fetch'],
       { repository },
-      new Error(messages.repositoryKeyNotProvided),
-      expect,
-      done
+      new Error(messages.repositoryKeyNotProvided)
     );
   });
 
-  it('Call fetch()  with unexisting key should' +
-    ' return \'Configuration repository key not found\' error', async () => {
-    expect.assertions(1);
-    ['fetch'].forEach((method) => {
-      mock.mockResolvedValueOnce({ [key]: value });
-      configService[method]({ repository, key: notFoundkey }).catch(
-        error => expect(error).toEqual(new Error(`Configuration repository key ${notFoundkey} not found`))
-      );
-    });
+  it('Call fetch()  with unexisting key should return \'repository key not found\' error', (done) => {
+    runTestsRejectedError(expect, done)(
+      configService,
+      ['fetch'],
+      { repository, key: notFoundkey },
+      new Error(`Configuration repository key ${notFoundkey} not found`),
+      () => mock.mockResolvedValueOnce({ [key]: value })
+    );
   });
 
 });
