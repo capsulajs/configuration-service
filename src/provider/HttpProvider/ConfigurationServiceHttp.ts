@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { Dispatcher, AxiosDispatcher } from '@capsulajs/capsulajs-transport-providers';
 import {
   ConfigurationService,
   CreateRepositoryRequest,
@@ -15,19 +15,22 @@ import {
 } from '../../api';
 import { messages, repositoryRequestValidator, repositoryKeyRequestValidator } from '../../utils';
 
-export class ConfigurationServiceFile<T=any> implements ConfigurationService<T> {
+export class ConfigurationServiceHttp implements ConfigurationService {
+  private dispatcher: Dispatcher;
+
   constructor(private token: string) {
     if (!this.token) {
       throw new Error(messages.tokenNotProvided);
     }
+    this.dispatcher = new AxiosDispatcher(`http://${token}`);
   }
 
-  private getRepository(repository: string) {
-    try {
-      return Promise.resolve(JSON.parse(fs.readFileSync(`${this.token}.${repository}`, 'utf8')) as Repository);
-    } catch {
-      return Promise.reject(new Error(`Configuration repository ${repository} not found`));
-    }
+  private getRepository(repository: string): Promise<Repository> {
+    return new Promise((resolve, reject) => {
+      this.dispatcher.dispatch<Repository, {}>(`/${repository}`, {}).then((repo: Repository) => {
+        repo ? resolve(repo) : reject(new Error(`Configuration repository ${repository} not found`));
+      }).catch(() => reject(new Error(`Configuration repository ${repository} not found`)));
+    });
   }
 
   createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
@@ -43,7 +46,7 @@ export class ConfigurationServiceFile<T=any> implements ConfigurationService<T> 
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
 
-    return this.getRepository(request.repository).then(repository => ({
+    return this.getRepository(request.repository).then((repository: Repository) => ({
       entries: Object.keys(repository).map(key => ({ key, value: repository[key] }))
     }));
   };

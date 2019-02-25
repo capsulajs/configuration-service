@@ -1,1 +1,0 @@
-export { ConfigurationServiceLocalStorage } from './ConfigurationServiceLocalStorage';

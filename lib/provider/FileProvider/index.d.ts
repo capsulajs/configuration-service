@@ -1,1 +1,0 @@
-export { ConfigurationServiceFile } from './ConfigurationServiceFile';

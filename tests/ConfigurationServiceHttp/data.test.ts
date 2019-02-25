@@ -1,15 +1,22 @@
-import { ConfigurationService } from 'api/ConfigurationService';
-import { ConfigurationServiceFile } from 'provider/FileProvider';
+import { ConfigurationServiceHttp } from 'provider/HttpProvider';
 
-const token = 'test';
-const repository = 'repository.json';
+const token = 'localhost:1234';
+const repository = 'Adele';
 const key = 'Hello';
 const value = 'It\'s me';
-const configService = new ConfigurationServiceFile(token);
+const data = {
+  [key]: value,
+  Surprise: 'I have a balloon'
+};
 
-describe('Test suite for the ConfigurationServiceFile', () => {
+const mock = jest.fn();
+const configService = new ConfigurationServiceHttp(token);
+configService.dispatcher.dispatch = mock;
+
+describe('Test suite for the ConfigurationServiceHttp', () => {
   it('entries() should return all values and keys', async () => {
     expect.assertions(1);
+    mock.mockResolvedValueOnce(data);
     expect(await configService.entries({ repository })).toEqual({
       entries: [{ key, value }, { key: 'Surprise', value: 'I have a balloon' }]
     });
@@ -17,6 +24,7 @@ describe('Test suite for the ConfigurationServiceFile', () => {
 
   it('fetch() should return value by key', async () => {
     expect.assertions(1);
+    mock.mockResolvedValueOnce(data);
     expect(await configService.fetch({ repository, key })).toEqual({ key, value });
   });
 
