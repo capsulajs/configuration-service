@@ -1,4 +1,4 @@
-import { Dispatcher } from '@capsulajs/capsulajs-transport-providers';
+import { Dispatcher, AxiosDispatcher } from '@capsulajs/capsulajs-transport-providers';
 import {
   ConfigurationService,
   CreateRepositoryRequest,
@@ -11,25 +11,25 @@ import {
   FetchResponse,
   SaveRequest,
   SaveResponse,
+  Repository
 } from '../../api';
 import { messages, repositoryRequestValidator, repositoryKeyRequestValidator } from '../../utils';
 
-export class ConfigurationServiceHttp<T=any> implements ConfigurationService<T> {
-  private storage: any;
+export class ConfigurationServiceHttp implements ConfigurationService {
+  private dispatcher: Dispatcher;
 
-  constructor(private dispatcher: Dispatcher) {
-    if (!this.dispatcher) {
-      throw new Error(messages.dispatcherNotProvided);
+  constructor(private token: string) {
+    if (!this.token) {
+      throw new Error(messages.tokenNotProvided);
     }
+    this.dispatcher = new AxiosDispatcher(`http://${token}`);
   }
 
-  private getRepository(repository: string) {
+  private getRepository(repository: string): Promise<Repository> {
     return new Promise((resolve, reject) => {
-      this.dispatcher.dispatch('/', {}).then((storage: any) => {
-        storage[repository]
-          ? resolve(storage[repository])
-          : reject(new Error(`Configuration repository ${repository} not found`));
-      }).catch(reject);
+      this.dispatcher.dispatch<Repository, {}>(`/${repository}`, {}).then((repo: Repository) => {
+        repo ? resolve(repo) : reject(new Error(`Configuration repository ${repository} not found`));
+      }).catch(() => reject(new Error(`Configuration repository ${repository} not found`)));
     });
   }
 

@@ -2,27 +2,26 @@ import { Dispatcher, AxiosDispatcher } from '@capsulajs/capsulajs-transport-prov
 import { ConfigurationServiceHttp } from 'provider/HttpProvider';
 import { messages } from '../../src/utils';
 
-const endpoint = 'http://localhost:1234';
+const token = 'localhost:1234';
 const repository = 'Adele';
+const notFoundRepository = 'Freddie Mercury';
 const key = 'Hello';
+const notFoundkey = 'Goodbye';
 const value = 'It\'s me';
 const data = {
-  [repository]: {
-    [key]: value,
-    Surprise: 'I have a balloon'
-  }
+  [key]: value,
+  Surprise: 'I have a balloon'
 };
 
-const dispatcher: Dispatcher = new AxiosDispatcher(endpoint);
 const mock = jest.fn();
-dispatcher.dispatch = mock;
-const configService = new ConfigurationServiceHttp(dispatcher);
+const configService = new ConfigurationServiceHttp(token);
+configService.dispatcher.dispatch = mock;
 
 describe('Test suite for the ConfigurationServiceHttp', () => {
 
   it('New instance of service should throw \'dispatcherNotProvided\' error', async () => {
     expect.assertions(1);
-    expect(() => new ConfigurationServiceHttp()).toThrow(new Error(messages.dispatcherNotProvided));
+    expect(() => new ConfigurationServiceHttp()).toThrow(new Error(messages.tokenNotProvided));
   });
 
   it('New instance should return \'repositoryNotProvided\' error', async () => {
@@ -35,11 +34,12 @@ describe('Test suite for the ConfigurationServiceHttp', () => {
   });
 
   it('Call fetch(), entries() with unexisting repository should' +
-    'return \'Configuration repository is not found\' error', async () => {
+    ' return \'Configuration repository is not found\' error', async () => {
     expect.assertions(2);
     ['entries', 'fetch'].forEach((method) => {
-      configService[method]({ repository: 'Not Adele', key }).catch(
-        error => expect(error).toEqual(new Error(`Configuration repository ${repository} not found`))
+      mock.mockRejectedValueOnce(null);
+      configService[method]({ repository: notFoundRepository, key }).catch(
+        error => expect(error).toEqual(new Error(`Configuration repository ${notFoundRepository} not found`))
       );
     });
   });
@@ -54,11 +54,12 @@ describe('Test suite for the ConfigurationServiceHttp', () => {
   });
 
   it('Call fetch()  with unexisting key should' +
-    'return \'Configuration repository key not found\' error', async () => {
+    ' return \'Configuration repository key not found\' error', async () => {
     expect.assertions(1);
     ['fetch'].forEach((method) => {
-      configService[method]({ repository, key: 'Goodbye' }).catch(
-        error => expect(error).toEqual(new Error(`Configuration repository key Goodbye not found`))
+      mock.mockResolvedValueOnce({ [key]: value });
+      configService[method]({ repository, key: notFoundkey }).catch(
+        error => expect(error).toEqual(new Error(`Configuration repository key ${notFoundkey} not found`))
       );
     });
   });

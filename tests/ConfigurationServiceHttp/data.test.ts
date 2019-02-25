@@ -1,21 +1,17 @@
-import { Dispatcher, AxiosDispatcher } from '@capsulajs/capsulajs-transport-providers';
 import { ConfigurationServiceHttp } from 'provider/HttpProvider';
 
-const endpoint = 'http://localhost:1234';
+const token = 'localhost:1234';
 const repository = 'Adele';
 const key = 'Hello';
 const value = 'It\'s me';
 const data = {
-  [repository]: {
-    [key]: value,
-    Surprise: 'I have a balloon'
-  }
+  [key]: value,
+  Surprise: 'I have a balloon'
 };
 
-const dispatcher: Dispatcher = new AxiosDispatcher(endpoint);
 const mock = jest.fn();
-dispatcher.dispatch = mock;
-const configService = new ConfigurationServiceHttp(dispatcher);
+const configService = new ConfigurationServiceHttp(token);
+configService.dispatcher.dispatch = mock;
 
 describe('Test suite for the ConfigurationServiceHttp', () => {
   it('entries() should return all values and keys', async () => {

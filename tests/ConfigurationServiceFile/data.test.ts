@@ -1,11 +1,11 @@
 import { ConfigurationService } from 'api/ConfigurationService';
 import { ConfigurationServiceFile } from 'provider/FileProvider';
 
-const filename = 'test.conf.json';
+const token = 'test.conf.json';
 const repository = 'Adele';
 const key = 'Hello';
 const value = 'It\'s me';
-const configService = new ConfigurationServiceFile(filename);
+const configService = new ConfigurationServiceFile(token);
 
 describe('Test suite for the ConfigurationServiceFile', () => {
   it('entries() should return all values and keys', async () => {
@@ -19,5 +19,5 @@ describe('Test suite for the ConfigurationServiceFile', () => {
     expect.assertions(1);
     expect(await configService.fetch({ repository, key })).toEqual({ key, value });
   });
-  
+
 });
