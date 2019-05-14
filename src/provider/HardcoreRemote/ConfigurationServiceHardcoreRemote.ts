@@ -14,7 +14,7 @@ import {
 } from '../../api';
 import { messages, repositoryKeyRequestValidator, repositoryRequestValidator } from '../../utils';
 
-const endpoint = '/io.scalecube.configuration.api.ConfigurationService';
+const endpoint = '/configuration';
 
 export class ConfigurationServiceHardcoreRemote<T=any> implements ConfigurationService<T> {
   constructor(private token: string, private dispatcher: Dispatcher) {
@@ -25,10 +25,7 @@ export class ConfigurationServiceHardcoreRemote<T=any> implements ConfigurationS
 
   private prepRequest(request: any): any {
     return {
-      token: {
-        token: this.token,
-        issuer: 'Auth0'
-      },
+      token: this.token,
       ...request
     };
   }
