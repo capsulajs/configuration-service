@@ -1,1 +1,1 @@
-export { ConfigurationServiceHttpFile } from './ConfigurationServiceHttp';
+export { ConfigurationServiceHttpFile } from './ConfigurationServiceHttpFile';

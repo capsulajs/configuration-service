@@ -12,7 +12,15 @@ import {
   SaveResponse,
   Repository
 } from '../../api';
-import { messages, repositoryRequestValidator, repositoryKeyRequestValidator } from '../../utils';
+import {
+  messages,
+  repositoryRequestValidator,
+  repositoryKeyRequestValidator,
+  fetchFile,
+  formatRepositoryToEntries,
+  getRepositoryNotFoundErrorMessage,
+  getRepositoryKeyNotFoundErrorMessage
+} from '../../utils';
 
 export class ConfigurationServiceHttpFile implements ConfigurationService {
   constructor(private token: string) {
@@ -23,16 +31,13 @@ export class ConfigurationServiceHttpFile implements ConfigurationService {
 
   private getRepository(repository: string): Promise<Repository> {
     return new Promise((resolve, reject) => {
-      fetch(`${this.token}/${repository}.json`)
-        .then((response) => response.json())
-        .then((formattedResponse) => {
-          resolve(formattedResponse);
-          console.log('formattedResponse', formattedResponse);
+      fetchFile(this.token, repository)
+        .then((repo: Repository) => {
+          Object.keys(repo).length ? resolve(repo) : reject(new Error(getRepositoryNotFoundErrorMessage(repository)));
+        })
+        .catch(() => {
+          reject(new Error(getRepositoryNotFoundErrorMessage(repository)));
         });
-
-      // this.dispatcher.dispatch<Repository, {}>(`/${repository}`, {}).then((repo: Repository) => {
-      //   repo ? resolve(repo) : reject(new Error(`Configuration repository ${repository} not found`));
-      // }).catch(() => reject(new Error(`Configuration repository ${repository} not found`)));
     });
   }
 
@@ -50,7 +55,7 @@ export class ConfigurationServiceHttpFile implements ConfigurationService {
     }
 
     return this.getRepository(request.repository).then((repository: Repository) => ({
-      entries: Object.keys(repository).map(key => ({ key, value: repository[key] }))
+      entries: formatRepositoryToEntries(repository)
     }));
   };
 
@@ -67,7 +72,7 @@ export class ConfigurationServiceHttpFile implements ConfigurationService {
       this.getRepository(request.repository).then(repository =>
         Object.keys(repository).indexOf(request.key) >= 0
           ? resolve({ key: request.key, value: repository[request.key] })
-          : reject(new Error(`Configuration repository key ${request.key} not found`))
+          : reject(new Error(getRepositoryKeyNotFoundErrorMessage(request.key)))
       ).catch(reject);
     });
   }

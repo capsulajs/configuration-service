@@ -13,7 +13,14 @@ import {
   SaveResponse,
   Repository
 } from '../../api';
-import { messages, repositoryRequestValidator, repositoryKeyRequestValidator } from '../../utils';
+import {
+  messages,
+  repositoryRequestValidator,
+  repositoryKeyRequestValidator,
+  formatRepositoryToEntries,
+  getRepositoryNotFoundErrorMessage,
+  getRepositoryKeyNotFoundErrorMessage
+} from '../../utils';
 
 export class ConfigurationServiceHttp implements ConfigurationService {
   private dispatcher: Dispatcher;
@@ -28,8 +35,8 @@ export class ConfigurationServiceHttp implements ConfigurationService {
   private getRepository(repository: string): Promise<Repository> {
     return new Promise((resolve, reject) => {
       this.dispatcher.dispatch<Repository, {}>(`/${repository}`, {}).then((repo: Repository) => {
-        repo ? resolve(repo) : reject(new Error(`Configuration repository ${repository} not found`));
-      }).catch(() => reject(new Error(`Configuration repository ${repository} not found`)));
+        repo ? resolve(repo) : reject(new Error(getRepositoryNotFoundErrorMessage(repository)));
+      }).catch(() => reject(new Error(getRepositoryNotFoundErrorMessage(repository))));
     });
   }
 
@@ -47,7 +54,7 @@ export class ConfigurationServiceHttp implements ConfigurationService {
     }
 
     return this.getRepository(request.repository).then((repository: Repository) => ({
-      entries: Object.keys(repository).map(key => ({ key, value: repository[key] }))
+      entries: formatRepositoryToEntries(repository)
     }));
   };
 
@@ -64,7 +71,7 @@ export class ConfigurationServiceHttp implements ConfigurationService {
       this.getRepository(request.repository).then(repository =>
         Object.keys(repository).indexOf(request.key) >= 0
           ? resolve({ key: request.key, value: repository[request.key] })
-          : reject(new Error(`Configuration repository key ${request.key} not found`))
+          : reject(new Error(getRepositoryKeyNotFoundErrorMessage(request.key)))
       ).catch(reject);
     });
   }
