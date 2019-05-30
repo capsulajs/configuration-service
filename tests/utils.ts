@@ -1,3 +1,5 @@
+import * as utils from '../src/utils';
+
 export const expectWithFailNow = (expect, done) => {
   try {
     expect();
@@ -34,4 +36,14 @@ export const runTestsRejectedError = (
       });
 
   });
-}
+};
+
+export const mockFetchFile = (data: { type: 'resolve' | 'reject', content: any }) => {
+  (utils as any).fetchFile = jest.fn(() => {
+    if (data.type === 'resolve') {
+      return Promise.resolve(data.content);
+    } else {
+      return Promise.reject(new Error(data.content));
+    }
+  })
+};
