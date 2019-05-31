@@ -1,4 +1,3 @@
-import { Dispatcher, AxiosDispatcher } from '@capsulajs/capsulajs-transport-providers';
 import {
   ConfigurationService,
   CreateRepositoryRequest,
@@ -17,26 +16,28 @@ import {
   messages,
   repositoryRequestValidator,
   repositoryKeyRequestValidator,
+  fetchFile,
   formatRepositoryToEntries,
   getRepositoryNotFoundErrorMessage,
   getRepositoryKeyNotFoundErrorMessage
 } from '../../utils';
 
-export class ConfigurationServiceHttp implements ConfigurationService {
-  private dispatcher: Dispatcher;
-
+export class ConfigurationServiceHttpFile implements ConfigurationService {
   constructor(private token: string) {
     if (!this.token) {
       throw new Error(messages.tokenNotProvided);
     }
-    this.dispatcher = new AxiosDispatcher(`http://${token}`);
   }
 
   private getRepository(repository: string): Promise<Repository> {
     return new Promise((resolve, reject) => {
-      this.dispatcher.dispatch<Repository, {}>(`/${repository}`, {}).then((repo: Repository) => {
-        repo ? resolve(repo) : reject(new Error(getRepositoryNotFoundErrorMessage(repository)));
-      }).catch(() => reject(new Error(getRepositoryNotFoundErrorMessage(repository))));
+      fetchFile(this.token, repository)
+        .then((repo: Repository) => {
+          Object.keys(repo).length ? resolve(repo) : reject(new Error(getRepositoryNotFoundErrorMessage(repository)));
+        })
+        .catch(() => {
+          reject(new Error(getRepositoryNotFoundErrorMessage(repository)));
+        });
     });
   }
 
