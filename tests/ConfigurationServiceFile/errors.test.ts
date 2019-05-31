@@ -1,6 +1,5 @@
-import { ConfigurationService } from 'api/ConfigurationService';
 import { ConfigurationServiceFile } from 'provider/FileProvider';
-import { messages } from '../../src/utils';
+import { messages } from '../../src';
 import { runTestsRejectedError } from '../utils';
 
 const token = 'test';

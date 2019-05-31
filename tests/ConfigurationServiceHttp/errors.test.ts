@@ -1,4 +1,3 @@
-import { Dispatcher, AxiosDispatcher } from '@capsulajs/capsulajs-transport-providers';
 import { ConfigurationServiceHttp } from 'provider/HttpProvider';
 import { messages } from '../../src/utils';
 import { runTestsRejectedError } from '../utils';
@@ -9,10 +8,6 @@ const notFoundRepository = 'Freddie Mercury';
 const key = 'Hello';
 const notFoundkey = 'Goodbye';
 const value = 'It\'s me';
-const data = {
-  [key]: value,
-  Surprise: 'I have a balloon'
-};
 
 const mock = jest.fn();
 const configService = new ConfigurationServiceHttp(token);

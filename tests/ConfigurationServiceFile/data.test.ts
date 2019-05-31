@@ -1,4 +1,3 @@
-import { ConfigurationService } from 'api/ConfigurationService';
 import { ConfigurationServiceFile } from 'provider/FileProvider';
 
 const token = 'test';
