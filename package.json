@@ -14,8 +14,7 @@
     "tsdoc": "rimraf docs/typescript && typedoc --mode file --module commonjs --out ./docs/typescript --target es5 --ignoreCompilerErrors"
   },
   "dependencies": {
-    "@capsulajs/capsulajs-transport-providers": "^0.1.1",
-    "parcel-bundler": "^1.12.3"
+    "@capsulajs/capsulajs-transport-providers": "^0.1.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.0",
