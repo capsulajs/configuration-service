@@ -13,3 +13,13 @@ export {
   SaveRequest,
   SaveResponse,
 } from './ConfigurationServiceTypes';
+export {
+  ConfigurationType,
+  LocalFileConfigurationType,
+  HttpFileConfigurationType,
+  HardcoreServerConfigurationType,
+  HttpServerConfigurationType,
+  LocalStorageConfigurationType,
+} from './ConfigurationType';
+export { GetProviderRequest } from './GetProviderRequest';
+export { GetProvider } from './GetProvider';
