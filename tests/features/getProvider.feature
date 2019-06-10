@@ -3,12 +3,12 @@
  Background:
     Given Configuration Service with getProvider utility
     And the following <configProvider> available
-         |<configProvider>            |
-         |LocalFileConfigurationType     |
-         |HttpFileConfigurationType      |
-         |HardcoreServerConfigurationType|
-         |HttpServerConfigurationType    |
-         |LocalStorageConfigurationType  |
+         |<configProvider>                   |
+         |LocalFileConfigurationProvider     |
+         |HttpFileConfigurationProvider      |
+         |HardcoreServerConfigurationProvider|
+         |HttpServerConfigurationProvider    |
+         |LocalStorageConfigurationProvider  |
 
  Scenario: getProvider returns the configuration provider according to configProvider
     When calling getProvider with available <configProvider>
