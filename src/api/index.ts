@@ -14,12 +14,12 @@ export {
   SaveResponse,
 } from './ConfigurationServiceTypes';
 export {
-  ConfigurationType,
-  LocalFileConfigurationType,
-  HttpFileConfigurationType,
-  HardcoreServerConfigurationType,
-  HttpServerConfigurationType,
-  LocalStorageConfigurationType,
-} from './ConfigurationType';
+  ConfigurationProvider,
+  LocalFileConfigurationProvider,
+  HttpFileConfigurationProvider,
+  HardcoreServerConfigurationProvider,
+  HttpServerConfigurationProvider,
+  LocalStorageConfigurationProvider,
+} from './ConfigurationProvider';
 export { GetProviderRequest } from './GetProviderRequest';
 export { GetProvider } from './GetProvider';
