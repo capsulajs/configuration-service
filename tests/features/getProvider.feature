@@ -2,21 +2,21 @@
 
  Background:
     Given Configuration Service with getProvider utility
-    And the following <configurationType> available
-         |<configurationType>            |
+    And the following <configProvider> available
+         |<configProvider>            |
          |LocalFileConfigurationType     |
          |HttpFileConfigurationType      |
          |HardcoreServerConfigurationType|
          |HttpServerConfigurationType    |
          |LocalStorageConfigurationType  |
 
- Scenario: getProvider returns the configuration provider according to configurationType
-    When calling getProvider with available <configurationType>
-    Then the corresponding class of ConfigurationService is returned
+ Scenario: getProvider returns the configuration provider according to configProvider
+    When calling getProvider with available <configProvider>
+    Then the corresponding class of ConfigurationProvider is returned
 
- Scenario: getProvider with an invalid configurationType is rejected with error
-    When calling getProvider with an invalid value of <configurationType>
-         |<configurationType>|
+ Scenario: getProvider with an invalid configProvider is rejected with error
+    When calling getProvider with an invalid value of <configProvider>
+         |<configProvider>|
          |''        |
          |{}        |
          |{ test: 'test' }|
@@ -30,7 +30,6 @@
          |-1        |
     Then a relevant error is returned
 
- Scenario: getProvider with an non-existent configurationType is rejected with error
-    When calling getProvider with a configurationType which is not in the list of available configuration types
+ Scenario: getProvider with an non-existent configProvider is rejected with error
+    When calling getProvider with a configProvider which is not in the list of available configuration types
     Then a relevant error is returned
-
