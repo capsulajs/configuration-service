@@ -36,7 +36,7 @@ export const messages = {
   getProviderInvalidRequest: `GetProvider request is not valid`,
 };
 
-export const fetchFile = (token: string, fileName: string) => fetch(`http://${token}/${fileName}.json`)
+export const fetchFile = (token: string, fileName: string) => fetch(`${token}/${fileName}.json`)
   .then((response) => response.json());
 
 export const formatRepositoryToEntries = (repository: Repository) => Object.keys(repository)

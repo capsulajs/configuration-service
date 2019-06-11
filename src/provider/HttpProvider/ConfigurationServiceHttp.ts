@@ -29,7 +29,7 @@ export class ConfigurationServiceHttp implements ConfigurationService {
     if (!this.token) {
       throw new Error(messages.tokenNotProvided);
     }
-    this.dispatcher = new AxiosDispatcher(`http://${token}`);
+    this.dispatcher = new AxiosDispatcher(`${token}`);
   }
 
   private getRepository(repository: string): Promise<Repository> {
