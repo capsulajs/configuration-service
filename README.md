@@ -12,7 +12,7 @@ _Example token: "./path/to/configuration"_
 
 Configuration will be included in a json file on some external http/https host and will be served statically.
 
-_Example token: "http://localhost:1234"_
+_Example token: "[http://localhost:1234](http://localhost:1234)"_
 
 ### hardcoreServer
 
@@ -22,7 +22,7 @@ Configuration will be available as an entry point of a special "hardcore" server
 
 Configuration will be available as an entry point of some http/https server.
 
-_Example token: "http://localhost:1234"_
+_Example token: "[http://localhost:1234](http://localhost:1234)"_
 
 ### localStorage
 
@@ -53,5 +53,3 @@ try {
   console.log('error.message');
 }
 ```
-
-
