@@ -1,4 +1,13 @@
-import { Repository } from './api';
+import {
+  Repository,
+  LocalFileConfigurationProvider,
+  HttpFileConfigurationProvider,
+  HardcoreServerConfigurationProvider,
+  HttpServerConfigurationProvider,
+  LocalStorageConfigurationProvider,
+  GetProviderRequest,
+  ConfigurationProviderClass
+} from './api';
 import { ConfigurationServiceHardcoreRemote } from './provider/HardcoreRemote';
 import { ConfigurationServiceLocalStorage } from './provider/LocalStorage';
 import { ConfigurationServiceFile } from './provider/FileProvider';
@@ -9,20 +18,22 @@ export const repositoryRequestValidator = (request: any) => request === undefine
 
 export const repositoryKeyRequestValidator = (request: any) => request.key === undefined;
 
+export const configurationTypes = {
+  localFile: 'localFile' as LocalFileConfigurationProvider,
+  hardcoreServer: 'hardcoreServer' as HardcoreServerConfigurationProvider,
+  httpFile: 'httpFile' as HttpFileConfigurationProvider,
+  httpServer: 'httpServer' as HttpServerConfigurationProvider,
+  localStorage: 'localStorage' as LocalStorageConfigurationProvider,
+};
+
 export const messages = {
   notImplemented: 'Configuration repository method not implemented yet',
   tokenNotProvided: 'Configuration repository token not provided',
   repositoryNotProvided: 'Configuration repository not provided',
   repositoryKeyNotProvided: 'Configuration repository key not provided',
-  repositoryAlreadyExists: 'Configuration repository already exists'
-};
-
-export const configurationTypes = {
-  localFile: 'localFile',
-  hardcoreServer: 'hardcoreServer',
-  httpFile: 'httpFile',
-  httpServer: 'httpServer',
-  localStorage: 'localStorage',
+  repositoryAlreadyExists: 'Configuration repository already exists',
+  configProviderDoesNotExist: `ConfigProvider does not exist. One of these values is available: ${Object.keys(configurationTypes).join(', ')}`,
+  getProviderInvalidRequest: `GetProvider request is not valid`,
 };
 
 export const fetchFile = (token: string, fileName: string) => fetch(`http://${token}/${fileName}.json`)
@@ -35,7 +46,11 @@ export const getRepositoryNotFoundErrorMessage = (repository: string) => `Config
 
 export const getRepositoryKeyNotFoundErrorMessage = (key: string) => `Configuration repository key ${key} not found`;
 
-export const getProvider = (getProviderRequest: any) => {
+export const getProvider = (getProviderRequest: GetProviderRequest): ConfigurationProviderClass => {
+  if (!getProviderRequest || typeof getProviderRequest !== 'object' || !getProviderRequest.configProvider) {
+    throw new Error(messages.getProviderInvalidRequest);
+  }
+
   switch (getProviderRequest.configProvider) {
     case configurationTypes.httpServer: {
       return ConfigurationServiceHttp;
@@ -51,6 +66,9 @@ export const getProvider = (getProviderRequest: any) => {
     }
     case configurationTypes.localStorage: {
       return ConfigurationServiceLocalStorage;
+    }
+    default: {
+      throw new Error(messages.configProviderDoesNotExist);
     }
   }
 };

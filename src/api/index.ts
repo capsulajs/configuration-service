@@ -23,3 +23,4 @@ export {
 } from './ConfigurationProvider';
 export { GetProviderRequest } from './GetProviderRequest';
 export { GetProvider } from './GetProvider';
+export { ConfigurationProviderClass } from './ConfigurationProviderClass';
