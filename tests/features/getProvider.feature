@@ -14,7 +14,7 @@
     When calling getProvider with available <configProvider>
     Then the corresponding class of ConfigurationProvider is returned
 
- Scenario: getProvider with an invalid configProvider is rejected with error
+ Scenario: getProvider with an invalid configProvider throws an error
     When calling getProvider with an invalid value of <configProvider>
          |<configProvider>|
          |''        |
@@ -28,8 +28,8 @@
          |false     |
          |0         |
          |-1        |
-    Then a relevant error is returned
+    Then a relevant error is being thrown
 
- Scenario: getProvider with an non-existent configProvider is rejected with error
+ Scenario: getProvider with an non-existent configProvider throws an error
     When calling getProvider with a configProvider which is not in the list of available configuration types
-    Then a relevant error is returned
+    Then a relevant error is being thrown
