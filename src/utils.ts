@@ -2,13 +2,13 @@ import {
   Repository,
   LocalFileConfigurationProvider,
   HttpFileConfigurationProvider,
-  HardcoreServerConfigurationProvider,
+  ScalecubeConfigurationProvider,
   HttpServerConfigurationProvider,
   LocalStorageConfigurationProvider,
   GetProviderRequest,
   ConfigurationProviderClass
 } from './api';
-import { ConfigurationServiceHardcoreRemote } from './provider/HardcoreRemote';
+import { ConfigurationServiceScalecube } from './provider/Scalecube';
 import { ConfigurationServiceLocalStorage } from './provider/LocalStorage';
 import { ConfigurationServiceFile } from './provider/FileProvider';
 import { ConfigurationServiceHttp } from './provider/HttpProvider';
@@ -20,7 +20,7 @@ export const repositoryKeyRequestValidator = (request: any) => request.key === u
 
 export const configurationTypes = {
   localFile: 'localFile' as LocalFileConfigurationProvider,
-  hardcoreServer: 'hardcoreServer' as HardcoreServerConfigurationProvider,
+  scalecube: 'scalecube' as ScalecubeConfigurationProvider,
   httpFile: 'httpFile' as HttpFileConfigurationProvider,
   httpServer: 'httpServer' as HttpServerConfigurationProvider,
   localStorage: 'localStorage' as LocalStorageConfigurationProvider,
@@ -55,8 +55,8 @@ export const getProvider = (getProviderRequest: GetProviderRequest): Configurati
     case configurationTypes.httpServer: {
       return ConfigurationServiceHttp;
     }
-    case configurationTypes.hardcoreServer: {
-      return ConfigurationServiceHardcoreRemote;
+    case configurationTypes.scalecube: {
+      return ConfigurationServiceScalecube;
     }
     case configurationTypes.httpFile: {
       return ConfigurationServiceHttpFile;

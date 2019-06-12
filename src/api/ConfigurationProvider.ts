@@ -7,9 +7,9 @@ export type LocalFileConfigurationProvider = 'localFile';
  */
 export type HttpFileConfigurationProvider = 'httpFile';
 /**
- * Configuration will be available as an entry point of a special "hardcore" server
+ * Configuration will be available as an entry point of a special Scalecube server
  */
-export type HardcoreServerConfigurationProvider = 'hardcoreServer';
+export type ScalecubeConfigurationProvider = 'scalecube';
 /**
  * Configuration will be available as an entry point of some http server
  */
@@ -21,4 +21,4 @@ export type LocalStorageConfigurationProvider = 'localStorage';
 /**
  * The type of Configuration Provider, that specifies how to get the configuration source
  */
-export type ConfigurationProvider = LocalFileConfigurationProvider | HttpFileConfigurationProvider | HardcoreServerConfigurationProvider | HttpServerConfigurationProvider | LocalStorageConfigurationProvider;
+export type ConfigurationProvider = LocalFileConfigurationProvider | HttpFileConfigurationProvider | ScalecubeConfigurationProvider | HttpServerConfigurationProvider | LocalStorageConfigurationProvider;

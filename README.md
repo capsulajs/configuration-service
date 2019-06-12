@@ -14,9 +14,9 @@ Configuration will be included in a json file on some external http/https host a
 
 _Example token: "[http://localhost:1234](http://localhost:1234)"_
 
-### hardcoreServer
+### scalecube
 
-Configuration will be available as an entry point of a special "hardcore" server.
+Configuration will be available as an entry point of a special Scalecube server.
 
 ### httpServer
 

@@ -6,7 +6,7 @@ describe('Expose function to select configuration provider in Configuration serv
     ${`${configurationTypes.localStorage}`}   | ${'ConfigurationServiceLocalStorage'}
     ${`${configurationTypes.localFile}`}      | ${'ConfigurationServiceFile'}
     ${`${configurationTypes.httpFile}`}       | ${'ConfigurationServiceHttpFile'}
-    ${`${configurationTypes.hardcoreServer}`} | ${'ConfigurationServiceHardcoreRemote'}
+    ${`${configurationTypes.scalecube}`}      | ${'ConfigurationServiceScalecube'}
     ${`${configurationTypes.httpServer}`}     | ${'ConfigurationServiceHttp'}
   `(
     'getProvider returns the configuration provider according to configProvider',

@@ -6,7 +6,7 @@
          |<configProvider>                   |
          |LocalFileConfigurationProvider     |
          |HttpFileConfigurationProvider      |
-         |HardcoreServerConfigurationProvider|
+         |ScalecubeConfigurationProvider|
          |HttpServerConfigurationProvider    |
          |LocalStorageConfigurationProvider  |
 
