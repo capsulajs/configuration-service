@@ -39,7 +39,7 @@ Will throw an error, if wrong **configProvider** is provided in the call of the 
 Possible values for **configProvider**:
 1. "localFile"
 2. "httpFile"
-3. "hardcoreServer"
+3. "scalecube"
 4. "httpServer"
 5. "localStorage"
 
