@@ -51,7 +51,7 @@ export class ConfigurationServiceScalecube<T=any> implements ConfigurationServic
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
 
-    return this.dispatcher.dispatch(`${endpoint}/entries`, this.prepRequest({}));
+    return this.dispatcher.dispatch(`${endpoint}/entries`, this.prepRequest(request));
   }
 
   fetch(request: FetchRequest): Promise<FetchResponse<T>> {
