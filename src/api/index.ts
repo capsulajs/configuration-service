@@ -17,9 +17,10 @@ export {
   ConfigurationProvider,
   LocalFileConfigurationProvider,
   HttpFileConfigurationProvider,
-  HardcoreServerConfigurationProvider,
+  ScalecubeConfigurationProvider,
   HttpServerConfigurationProvider,
   LocalStorageConfigurationProvider,
 } from './ConfigurationProvider';
 export { GetProviderRequest } from './GetProviderRequest';
 export { GetProvider } from './GetProvider';
+export { ConfigurationProviderClass } from './ConfigurationProviderClass';
