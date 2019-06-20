@@ -7,6 +7,7 @@ import {
   DeleteResponse,
   EntriesRequest,
   EntriesResponse,
+  Entity,
   FetchRequest,
   FetchResponse,
   SaveRequest,
@@ -51,7 +52,8 @@ export class ConfigurationServiceScalecube<T=any> implements ConfigurationServic
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
 
-    return this.dispatcher.dispatch(`${endpoint}/entries`, this.prepRequest(request));
+    return this.dispatcher.dispatch<any, Entity<T>[]>(`${endpoint}/entries`, this.prepRequest(request))
+      .then(entries => ({entries}));
   }
 
   fetch(request: FetchRequest): Promise<FetchResponse<T>> {

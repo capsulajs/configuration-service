@@ -39,10 +39,10 @@ export interface ConfigurationService<T = any> {
    * Gets the value of the specified key
    * @return promise with the key's values
    * */
-  fetch(request: FetchRequest): Promise<FetchResponse>;
+  fetch(request: FetchRequest): Promise<FetchResponse<T>>;
   /**
    * Sets the value of the specified key
    * @return an empty promise
    * */
-  save(request: SaveRequest): Promise<SaveResponse>;
-};
+  save(request: SaveRequest<T>): Promise<SaveResponse>;
+}
