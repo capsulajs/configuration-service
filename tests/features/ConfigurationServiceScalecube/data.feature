@@ -43,7 +43,7 @@ Scenario: readEntry() should return value by key
   Given  ConfigurationServiceScalecube with readEntryHistory method
   And    an existing repository containing the following entries with <key> and <version>
          |<key> |<version>|
-		 |X     | 1 |
+         |X     | 1 |
          |X     | 2 |
          |X     | 3 |
   When   user calls readEntryHistory method with key:X and the name of this repository
@@ -60,12 +60,6 @@ Scenario: Call readList() with a valid version that doesn't exists
   And    an existing repository containing several entries with version:1
   When   user calls readList method with the name of this repository and version:2
   Then   user receives all the entries of version:1 with values and their keys from the repository
-
-Scenario: Call readEntry() without specifying the vesion
-  Given  ConfigurationServiceScalecube with readEntry method
-  And    an existing repository containing an entry with key:X
-  When   user calls readEntry method with key:X and the name of this repository and without specifying the vesion
-  Then   user receives an entry with key:X and its value of the latest version from the repository
 
 Scenario:Call readEntry() without specifying the vesion
   Given  ConfigurationServiceScalecube with readEntry method
