@@ -60,10 +60,9 @@ Scenario: Call createEntry(), readEntry(),  updateEntry(), deleteEntry(), readEn
     When  user calls one of the methods without providing the key in the request
     Then  user receives an error that the key is not provided
 
-Scenario: Call createEntry(), readEntry(),  updateEntry(), deleteEntry(), readEntryHistory()  with unexisting key should throw error
+Scenario: Call readEntry(),  updateEntry(), deleteEntry(), readEntryHistory() with unexisting key should throw error
     Given configurationServiceScalecube with following <methods>
           |<methods>       |
-          |createEntry     |
           |readEntry       |
           |updateEntry     |
           |deleteEntry     |
@@ -71,7 +70,7 @@ Scenario: Call createEntry(), readEntry(),  updateEntry(), deleteEntry(), readEn
     And   configurationServiceScalecube is created with a valid token
     And   an existing repository
     When  user calls one of the methods by providing an unexisting key in the request
-    Then  user receives an error 
+    Then  user receives an error that provided key doesn't exist
 
 Scenario: createRepository() providing an existing repository name should return error
   Given ConfigurationServiceScalecube with createRepository method
@@ -79,12 +78,12 @@ Scenario: createRepository() providing an existing repository name should return
   When  user calls createRepository method providing an existing name of repository in the request
   Then  user receives an error that the repository already exists
 
-Scenario: createEntry() with a key that exists in the repository
+Scenario: createEntry() with a key that already exists in the repository
   Given configurationServiceScalecube with createEntry method
   And   an existing repository A with apiKey B
   And   an entry with key: X and value: Y 
   When  user calls createEntry method with key: X and value: Y 
-  Then  user receives an error 
+  Then  user receives an error that key already exists 
   
 Scenario: Call readEntry() with a valid version that doesn't exists
   Given  ConfigurationServiceScalecube with readList method
