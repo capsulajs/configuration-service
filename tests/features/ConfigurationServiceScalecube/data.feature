@@ -19,7 +19,7 @@ Scenario: deleteEntry() should return empty object and delete the entry from rep
           |key        | string |
   Then   the entry with key:X is deleted from repository A
 
-Scenario: readEntry() should return entry by key
+Scenario: readEntry() should return an entry by key
   Given  ConfigurationServiceScalecube with readEntry method
   And    an existing repository A 
   And    an entry with key:X and version:1
