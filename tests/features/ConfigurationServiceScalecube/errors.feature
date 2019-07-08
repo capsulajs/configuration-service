@@ -20,20 +20,6 @@ Scenario: Call method from configurationServiceScalecube  without repository in 
     And   user does not provide repository name in the request
     Then  `Please specify 'repository'` error message will be returned
 
-Scenario: Call method from configurationServiceScalecube  without apiKey in the request - error is thrown
-    Given configurationServiceScalecube is created with a valid token
-    And   configurationServiceScalecube with following <methods>
-          |<methods>       |
-          |createRepository|
-          |deleteEntry      |
-          |readList        |
-          |readEntry       |
-          |createEntry     |
-          |readEntryHistory|
-    When  user calls one of the methods
-    And   user does not provide apiKey in the request
-    Then  `Please specify 'apiKey' not found` error message will be returned
-
 Scenario: Call createEntry(), readEntry(),  updateEntry(), deleteEntry(), readEntryHistory() with unexisting repository should throw error
     Given configurationServiceScalecube with following <methods>
           |<methods>       |
