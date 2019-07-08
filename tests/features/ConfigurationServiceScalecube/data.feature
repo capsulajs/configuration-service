@@ -4,30 +4,27 @@ Background:
 
 Scenario: createRepository() should create configuration repository
   Given ConfigurationServiceScalecube with createRepository method
-  When  user calls createRepository method with the following parameters 
+  When  user calls createRepository method with the following request
           |<parameter>|<type> |
-          |apiKey     | object|
           |repository | string|
-  Then  a new empty repository is created with the provided apiKey and repository name
+  Then  a new empty repository is created with the provided repository name
 
 Scenario: deleteEntry() should return empty object and delete the entry from repository
   Given  ConfigurationServiceScalecube with deleteEntry method
-  And    an existing repository A and apiKey B
+  And    an existing repository A 
   And    an entry with key:X
   When   user calls deleteEntry method with the following request
           |<parameter>|<type>  |
-          |apiKey     | object |
           |repository | string |
           |key        | string |
   Then   the entry with key:X is deleted from repository A
 
 Scenario: readEntry() should return entry by key
   Given  ConfigurationServiceScalecube with readEntry method
-  And    an existing repository A and apiKey B
+  And    an existing repository A 
   And    an entry with key:X and version:1
   When   user calls readEntry method with the following request
           |<parameter>|<type>  |
-          |apiKey     | object |
           |repository | string |
           |version    | number |
           |key        | string |
@@ -41,10 +38,9 @@ Scenario: Call readEntry() with empty version returns the latest version
   
  Scenario: createEntry() should persist value by key
    Given configurationServiceScalecube with createEntry method
-   And    an existing repository A and apiKey B
+   And    an existing repository A 
    When   user calls createEntry method with the following request
           |<parameter>|<type>  |
-          |apiKey     | object |
           |repository | string |
           |value      |JsonNode|
           |key        | string |
@@ -52,11 +48,10 @@ Scenario: Call readEntry() with empty version returns the latest version
 
  Scenario: Call updateEntry() should update existing entry
    Given configurationServiceScalecube with updateEntry method
-   And   an existing repository A with apiKey B
+   And   an existing repository A
    And   an entry with key: X and value: Y is already saved
    When   user calls updateEntry method with the following request
           |<parameter>|<type>  |
-          |apiKey     | object |
           |repository | string |
           |value      |JsonNode|
           |key        | string |
@@ -76,11 +71,10 @@ Scenario: Call readEntry() with empty version returns the latest version
 
 Scenario: readList() should return all  entries(keys/values)
   Given  ConfigurationServiceScalecube with readList method
-  And    an existing repository A and apiKey B
+  And    an existing repository A 
   And    several entries with version:1
   When   user calls readList method with the following request
           |<parameter>|<type>  |
-          |apiKey     | object |
           |repository | string |
           |version    | number |
   Then   user receives all the entries of the version:1 with values and their keys from repository A
