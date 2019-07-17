@@ -24,12 +24,12 @@ import {
 
 interface ConfigurationServiceHttpFileRequest {
   token: string,
-  cache?: boolean
+  disableCache?: boolean
 }
 
 export class ConfigurationServiceHttpFile implements ConfigurationService {
   private token: string = '';
-  private cache?: boolean;
+  private disableCache?: boolean;
 
   constructor(request: string | ConfigurationServiceHttpFileRequest) {
     if(typeof request === 'string') {
@@ -37,7 +37,7 @@ export class ConfigurationServiceHttpFile implements ConfigurationService {
     }
     else if(typeof(request) === 'object') {
       this.token = request.token;
-      this.cache = request.cache;
+      this.disableCache = request.disableCache;
     }
 
     if (!this.token) {
@@ -47,7 +47,7 @@ export class ConfigurationServiceHttpFile implements ConfigurationService {
 
   private getRepository(repository: string): Promise<Repository> {
     return new Promise((resolve, reject) => {
-      fetchFile(this.token, repository, this.cache)
+      fetchFile(this.token, repository, this.disableCache)
         .then((repo: Repository) => {
           Object.keys(repo).length ? resolve(repo) : reject(new Error(getRepositoryNotFoundErrorMessage(repository)));
         })
