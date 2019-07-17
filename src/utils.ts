@@ -36,8 +36,9 @@ export const messages = {
   getProviderInvalidRequest: `GetProvider request is not valid`,
 };
 
-export const fetchFile = (token: string, fileName: string) => fetch(`${token}/${fileName}.json`)
-  .then((response) => response.json());
+export const fetchFile = (token: string, fileName: string, cache?: boolean) => {
+  const timeStamp = cache ? `?=${new Date().getTime()}`: '';
+  return fetch(`${token}/${fileName}.json${timeStamp}`).then((response) => response.json())};
 
 export const formatRepositoryToEntries = (repository: Repository) => Object.keys(repository)
   .map(key => ({ key, value: repository[key] }));

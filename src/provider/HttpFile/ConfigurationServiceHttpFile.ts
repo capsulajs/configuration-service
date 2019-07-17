@@ -22,8 +22,24 @@ import {
   getRepositoryKeyNotFoundErrorMessage
 } from '../../utils';
 
+interface ConfigurationServiceHttpFileRequest {
+  token: string,
+  cache?: boolean
+}
+
 export class ConfigurationServiceHttpFile implements ConfigurationService {
-  constructor(private token: string) {
+  private token: string = '';
+  private cache?: boolean;
+
+  constructor(request: string | ConfigurationServiceHttpFileRequest) {
+    if(typeof request === 'string') {
+      this.token = request;
+    }
+    else if(typeof(request) === 'object') {
+      this.token = request.token;
+      this.cache = request.cache;
+    }
+
     if (!this.token) {
       throw new Error(messages.tokenNotProvided);
     }
@@ -31,7 +47,7 @@ export class ConfigurationServiceHttpFile implements ConfigurationService {
 
   private getRepository(repository: string): Promise<Repository> {
     return new Promise((resolve, reject) => {
-      fetchFile(this.token, repository)
+      fetchFile(this.token, repository, this.cache)
         .then((repo: Repository) => {
           Object.keys(repo).length ? resolve(repo) : reject(new Error(getRepositoryNotFoundErrorMessage(repository)));
         })
