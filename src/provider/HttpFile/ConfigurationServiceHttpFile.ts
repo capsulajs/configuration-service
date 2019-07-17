@@ -35,7 +35,7 @@ export class ConfigurationServiceHttpFile implements ConfigurationService {
     if(typeof request === 'string') {
       this.token = request;
     }
-    else if(typeof(request) === 'object') {
+    else if(typeof request === 'object') {
       this.token = request.token;
       this.disableCache = request.disableCache;
     }
