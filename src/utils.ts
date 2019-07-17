@@ -37,7 +37,7 @@ export const messages = {
 };
 
 export const fetchFile = (token: string, fileName: string, disableCache?: boolean) => {
-  const timeStamp = disableCache ? `?=${new Date().getTime()}`: '';
+  const timeStamp = disableCache ? `?=${Date.now()}`: '';
   return fetch(`${token}/${fileName}.json${timeStamp}`).then((response) => response.json())};
 
 export const formatRepositoryToEntries = (repository: Repository) => Object.keys(repository)
