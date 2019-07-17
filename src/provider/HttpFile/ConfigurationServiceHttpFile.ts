@@ -22,7 +22,7 @@ import {
   getRepositoryKeyNotFoundErrorMessage
 } from '../../utils';
 
-interface ConfigurationServiceHttpFileRequest {
+interface Options {
   token: string,
   disableCache?: boolean
 }
@@ -31,13 +31,20 @@ export class ConfigurationServiceHttpFile implements ConfigurationService {
   private token: string = '';
   private disableCache?: boolean;
 
-  constructor(request: string | ConfigurationServiceHttpFileRequest) {
+  /**
+    ConfigurationServiceHttpFile constructor
+    A provider for 'http file' method of fetching configuration
+    @param {request} an object of 'Options' type, which includes (token: string, disableCache?: boolean)
+    Note: passing 'string' it's deprecated, please provide an object
+  */
+  constructor(request: string | Options) {
+    // 'typeof request === string' is for backward compatibility and it's deprecated
     if(typeof request === 'string') {
       this.token = request;
     }
     else if(typeof request === 'object') {
       this.token = request.token;
-      this.disableCache = request.disableCache;
+      this.disableCache = request.disableCache || false;
     }
 
     if (!this.token) {
