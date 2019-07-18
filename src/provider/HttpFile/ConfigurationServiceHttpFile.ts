@@ -22,8 +22,31 @@ import {
   getRepositoryKeyNotFoundErrorMessage
 } from '../../utils';
 
+interface Options {
+  token: string,
+  disableCache?: boolean
+}
+
 export class ConfigurationServiceHttpFile implements ConfigurationService {
-  constructor(private token: string) {
+  private token: string = '';
+  private disableCache?: boolean;
+
+  /**
+    ConfigurationServiceHttpFile constructor
+    A provider for 'http file' method of fetching configuration
+    @param {request} an object of 'Options' type, which includes (token: string, disableCache?: boolean)
+    Note: passing 'string' it's deprecated, please provide an object
+  */
+  constructor(request: string | Options) {
+    // 'typeof request === string' is for backward compatibility and it's deprecated
+    if(typeof request === 'string') {
+      this.token = request;
+    }
+    else if(typeof request === 'object') {
+      this.token = request.token;
+      this.disableCache = request.disableCache || false;
+    }
+
     if (!this.token) {
       throw new Error(messages.tokenNotProvided);
     }
@@ -31,7 +54,7 @@ export class ConfigurationServiceHttpFile implements ConfigurationService {
 
   private getRepository(repository: string): Promise<Repository> {
     return new Promise((resolve, reject) => {
-      fetchFile(this.token, repository)
+      fetchFile(this.token, repository, this.disableCache)
         .then((repo: Repository) => {
           Object.keys(repo).length ? resolve(repo) : reject(new Error(getRepositoryNotFoundErrorMessage(repository)));
         })
