@@ -65,7 +65,7 @@ Scenario: Call save() with an existing key should update the relevant entry
    And   version is increased by 1
 
 
- //for future implementation
+#for future implementation
 Scenario: Call fetch() with empty version returns the latest version
    Given  ConfigurationServiceScalecube with fetch method
    And    an existing repository containing an entry with key:X and version:1
