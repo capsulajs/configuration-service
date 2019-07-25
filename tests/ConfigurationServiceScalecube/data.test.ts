@@ -43,7 +43,3 @@ describe('Test suite for the ConfigurationServiceLocalScalecube', () => {
         expect(await configService.save({ repository, key, value })).toEqual({ repository });
     });
 });
-
-
-
-
