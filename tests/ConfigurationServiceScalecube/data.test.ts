@@ -1,5 +1,5 @@
-import {ConfigurationServiceScalecube} from '../../src/provider/Scalecube';
 import {AxiosDispatcher} from '@capsulajs/capsulajs-transport-providers';
+import {ConfigurationServiceScalecube} from '../../src/provider/Scalecube';
 
 const token = 'token';
 const repository = 'Adele';
