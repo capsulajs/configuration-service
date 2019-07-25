@@ -37,17 +37,12 @@ describe('Test suite for the ConfigurationServiceLocalScalecube', () => {
         expect(await configService.fetch({ repository, key })).toEqual({ key, value });
     });
 
-    it('save() should create a new entry', async () => {
+    it('Call save() with new key should create a new entry', async () => {
         expect.assertions(1);
         mockedCallback.mockResolvedValueOnce({ repository });
         expect(await configService.save({ repository, key, value })).toEqual({ repository });
     });
 });
-
-
-
-
-
 
 
 
