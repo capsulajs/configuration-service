@@ -44,6 +44,10 @@ export class ConfigurationServiceScalecube<T=any> implements ConfigurationServic
             return Promise.reject(new Error(messages.repositoryNotProvided));
         }
 
+        if (repositoryKeyRequestValidator(request)) {
+            return Promise.reject(new Error(messages.repositoryKeyNotProvided));
+        }
+
         return this.dispatcher.dispatch(`${endpoint}/deleteEntry`, this.prepRequest(request));
     }
 
