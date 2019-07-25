@@ -1,16 +1,17 @@
 import { Dispatcher } from '@capsulajs/capsulajs-transport-providers';
 import {
-    ConfigurationService,
-    CreateRepositoryRequest,
-    CreateRepositoryResponse,
-    DeleteRequest,
-    DeleteResponse,
-    EntriesRequest,
-    EntriesResponse,
-    FetchRequest,
-    FetchResponse,
-    SaveRequest,
-    SaveResponse,
+  ConfigurationService,
+  CreateRepositoryRequest,
+  CreateRepositoryResponse,
+  DeleteRequest,
+  DeleteResponse,
+  EntriesRequest,
+  EntriesResponse,
+  Entity,
+  FetchRequest,
+  FetchResponse,
+  SaveRequest,
+  SaveResponse,
 } from '../../api';
 import { messages, repositoryKeyRequestValidator, repositoryRequestValidator } from '../../utils';
 
