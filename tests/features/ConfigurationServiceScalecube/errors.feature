@@ -67,7 +67,7 @@ Scenario: createRepository() providing an existing repository name should return
    When  user calls createRepository method repository A in the request
    Then  user receives'repositoryAlreadyExists' error
 
-// for future implementation
+#for future implementation
 Scenario: Call fetch() with a valid version that doesn't exists
    Given  ConfigurationServiceScalecube with fetch method
    And    an existing repository containing an entry with key:X and version:1
