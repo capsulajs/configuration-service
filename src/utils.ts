@@ -13,6 +13,7 @@ import { ConfigurationServiceLocalStorage } from './provider/LocalStorage';
 import { ConfigurationServiceFile } from './provider/FileProvider';
 import { ConfigurationServiceHttp } from './provider/HttpProvider';
 import { ConfigurationServiceHttpFile } from './provider/HttpFile';
+import 'whatwg-fetch';
 
 export const repositoryRequestValidator = (request: any) => request === undefined || request.repository === undefined;
 
