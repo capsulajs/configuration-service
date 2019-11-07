@@ -42,7 +42,30 @@ export interface ConfigurationService<T = any> {
   fetch(request: FetchRequest): Promise<FetchResponse<T>>;
   /**
    * Sets the value of the specified key
+   * Deprecated method
    * @return an empty promise
    * */
   save(request: SaveRequest<T>): Promise<SaveResponse>;
+  /**
+   * Creates a new entry in ConfigurationService
+   * @return a promise, that is resolved when a new entry has been successfully created
+   * Rejected in case of:
+   * Code|Description
+   * -----|-----
+   * ERR_ALREADY_EXIST|The entry with a provided key already exists|
+   * ERR_INVALID_REQUEST|Request is invalid|
+   * ERR_NETWORK_ERROR|Network error while providing the operation|
+   * */
+  create(request: SaveRequest<T>): Promise<SaveResponse>;
+  /**
+   * Updates an existing entry in ConfigurationService
+   * @return a promise, that is resolved when a new entry has been successfully updated
+   * Rejected in case of:
+   * Code|Description
+   * -----|-----
+   * ERR_NOT_EXIST|The entry with a provided key hasn't been created yet|
+   * ERR_INVALID_REQUEST|Request is invalid|
+   * ERR_NETWORK_ERROR|Network error while providing the operation|
+   * */
+  update(request: SaveRequest<T>): Promise<SaveResponse>;
 }
