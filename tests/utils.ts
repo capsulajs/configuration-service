@@ -47,3 +47,9 @@ export const mockFetchFile = (data: { type: 'resolve' | 'reject', content: any }
     }
   })
 };
+
+export const invalidValues = [' ', '', [], ['test'], null, true, false, 0, -1, undefined];
+
+export const invalidValuesForString = [...invalidValues, {}, { test: 'test' }];
+
+
