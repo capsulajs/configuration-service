@@ -42,4 +42,16 @@ describe('Test suite for the ConfigurationServiceLocalScalecube', () => {
     mockedCallback.mockResolvedValueOnce({repository});
     expect(await configService.save({repository, key, value})).toEqual({repository});
   });
+
+  it('Call createEntry() with a new key should create a new entry', () => {
+    expect.assertions(1);
+    mockedCallback.mockResolvedValueOnce(Promise.resolve({ repository }));
+    return expect(configService.createEntry({ repository, key, value })).resolves.toEqual({})
+  });
+
+  it('Call updateEntry() with an existing key should update the relevant entry', () => {
+    expect.assertions(1);
+    mockedCallback.mockResolvedValueOnce(Promise.resolve({ repository }));
+    return expect(configService.updateEntry({ repository, key, value })).resolves.toEqual({})
+  });
 });

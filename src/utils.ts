@@ -35,6 +35,9 @@ export const messages = {
   repositoryAlreadyExists: 'Configuration repository already exists',
   configProviderDoesNotExist: `ConfigProvider does not exist. One of these values is available: ${Object.keys(configurationTypes).join(', ')}`,
   getProviderInvalidRequest: `GetProvider request is not valid`,
+  invalidRequest: 'Request is invalid - it should be a valid object',
+  invalidRepository: 'Repository is invalid - it should be a non-empty string',
+  invalidKey: 'Key is invalid - it should be a non-empty string',
 };
 
 export const fetchFile = (token: string, fileName: string, disableCache?: boolean) => {
