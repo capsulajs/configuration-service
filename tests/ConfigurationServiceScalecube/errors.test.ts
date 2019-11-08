@@ -83,70 +83,36 @@ describe('Errors tests for the ConfigurationServiceScalecube', () => {
     return expect(configService.createRepository({repository})).rejects.toEqual(exception);
   });
 
-  // CreateEntry
+  describe.each(['createEntry', 'updateEntry'])('Errors while the creation or updating of the entry', (methodName: 'createEntry' | 'updateEntry') => {
+    test.each(invalidValues)(
+      `Call ${methodName} with request, that is not an object, is rejected with an error (%s)`,
+      (invalidRequest) => {
+        expect.assertions(1);
+        return expect(configService[methodName](invalidRequest))
+          .rejects.toEqual(new Error(messages.invalidRequest));
+      });
 
-  test.each(invalidValues)(
-    'Call createEntry with request, that is not an object, is rejected with an error (%s)',
-    (invalidRequest) => {
+    test.each(invalidValuesForString)(
+      `Call ${methodName} with invalid repository is rejected with an error (%s)`,
+      (invalidRepository) => {
+        expect.assertions(1);
+        return expect(configService[methodName]({ repository: invalidRepository, key, value }))
+          .rejects.toEqual(new Error(messages.invalidRepository));
+      });
+
+    test.each(invalidValuesForString)(
+      `Call ${methodName} with invalid key is rejected with an error (%s)`,
+      (invalidKey) => {
+        expect.assertions(1);
+        return expect(configService[methodName]({ repository, key: invalidKey, value }))
+          .rejects.toEqual(new Error(messages.invalidKey));
+      });
+
+    it(`Call ${methodName} with a valid request and there is a server error - promise is rejected with an error`, () => {
       expect.assertions(1);
-      return expect(configService.createEntry(invalidRequest))
-        .rejects.toEqual(new Error(messages.invalidRequest));
+      const exception = { errorCode: 500, errorMessage: 'Server error' };
+      mockedCallback.mockRejectedValueOnce(exception);
+      return expect(configService[methodName]({ repository, key, value })).rejects.toEqual(exception);
     });
-
-  test.each(invalidValuesForString)(
-    'Call createEntry with invalid repository is rejected with an error (%s)',
-    (invalidRepository) => {
-      expect.assertions(1);
-      return expect(configService.createEntry({ repository: invalidRepository, key, value }))
-        .rejects.toEqual(new Error(messages.invalidRepository));
-    });
-
-  test.each(invalidValuesForString)(
-    'Call createEntry with invalid key is rejected with an error (%s)',
-    (invalidKey) => {
-      expect.assertions(1);
-      return expect(configService.createEntry({ repository, key: invalidKey, value }))
-        .rejects.toEqual(new Error(messages.invalidKey));
-    });
-
-  it('Call createEntry with a valid request and there is a server error - promise is rejected with an error', () => {
-    expect.assertions(1);
-    const exception = { errorCode: 500, errorMessage: 'The entry already exists' };
-    mockedCallback.mockRejectedValueOnce(exception);
-    return expect(configService.updateEntry({ repository, key, value })).rejects.toEqual(exception);
   });
-
-  // UpdateEntry
-
-  test.each(invalidValues)(
-    'Call updateEntry with request, that is not an object, is rejected with an error (%s)',
-    (invalidRequest) => {
-      expect.assertions(1);
-      return expect(configService.updateEntry(invalidRequest))
-        .rejects.toEqual(new Error(messages.invalidRequest));
-    });
-
-  test.each(invalidValuesForString)(
-    'Call updateEntry with invalid repository is rejected with an error (%s)',
-    (invalidRepository) => {
-      expect.assertions(1);
-      return expect(configService.updateEntry({ repository: invalidRepository, key, value }))
-        .rejects.toEqual(new Error(messages.invalidRepository));
-    });
-
-  test.each(invalidValuesForString)(
-    'Call updateEntry with invalid key is rejected with an error (%s)',
-    (invalidKey) => {
-      expect.assertions(1);
-      return expect(configService.updateEntry({ repository, key: invalidKey, value }))
-        .rejects.toEqual(new Error(messages.invalidKey));
-    });
-
-  it('Call updateEntry with a valid request and there is a server error - promise is rejected with an error', () => {
-    expect.assertions(1);
-    const exception = { errorCode: 500, errorMessage: 'The entry does not exists' };
-    mockedCallback.mockRejectedValueOnce(exception);
-    return expect(configService.updateEntry({ repository, key, value })).rejects.toEqual(exception);
-  });
-
 });
