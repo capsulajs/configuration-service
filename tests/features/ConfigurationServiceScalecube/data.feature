@@ -64,6 +64,33 @@ Feature: Data tests for the ConfigurationServiceScalecube
     Then  the entry with key X is updated with value Z
     And   version is increased by 1
 
+  Scenario: Call createEntry() with a new key should create a new entry
+    Given configurationServiceScalecube with createEntry method
+    And   an existing repository A
+    And   an entry with key: X does not exist
+    When  user calls create method with key: X and the following request
+         | <parameter> | <type>   |
+         | repository  | string   |
+         | value       | JsonNode |
+         | key         | string   |
+    And   key:X and value:Z
+    Then  the entry with key X is created with value Z
+    And   version equals 1
+    And   the promise that is returned from a method call resolves with an empty object
+
+  Scenario: Call updateEntry() with an existing key should update the relevant entry
+    Given configurationServiceScalecube with updateEntry method
+    And   an existing repository A
+    And   an entry with key: X and value: Y is already saved
+    When  user calls save method with key: X and the following request
+         | <parameter> | <type>   |
+         | repository  | string   |
+         | value       | JsonNode |
+         | key         | string   |
+    And   key:X and value:Z
+    Then  the entry with key X is updated with value Z
+    And   version is increased by 1
+    And   the promise that is returned from a method call resolves with an empty object
 
 #for future implementation
   Scenario: Call fetch() with empty version returns the latest version
@@ -93,4 +120,5 @@ Feature: Data tests for the ConfigurationServiceScalecube
     And    an existing repository containing several entries with version:1
     When   user calls entries method with the name of this repository and version:2
     Then   user receives  an empty array
+
 
