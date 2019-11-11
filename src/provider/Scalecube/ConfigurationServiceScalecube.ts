@@ -14,6 +14,7 @@ import {
   SaveResponse,
 } from '../../api';
 import {messages, repositoryKeyRequestValidator, repositoryRequestValidator} from '../../utils';
+import { isNonEmptyString, isObject, validateSaveEntryRequest } from '../../validators';
 
 const endpoint = '/configuration';
 
@@ -87,6 +88,25 @@ export class ConfigurationServiceScalecube<T = any> implements ConfigurationServ
       }
     }
   }
+
+  public createEntry(request: SaveRequest<T>) {
+    return this.changeEntry(request, 'create');
+  }
+
+  public updateEntry(request: SaveRequest<T>) {
+    return this.changeEntry(request, 'update');
+  }
+
+  private changeEntry = (request: SaveRequest<T>, mode: 'update' | 'create') => {
+    try {
+      validateSaveEntryRequest(request);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+
+    return this.dispatcher.dispatch(`${endpoint}/${mode}Entry`, this.prepRequest(request))
+      .then(() => ({}));
+  };
 
   private prepRequest(request: any): any {
     return {

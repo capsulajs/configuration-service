@@ -79,4 +79,12 @@ export class ConfigurationServiceHttp implements ConfigurationService {
   save(request: SaveRequest): Promise<SaveResponse> {
     return Promise.reject(new Error(messages.notImplemented));
   }
+
+  createEntry(request: SaveRequest) {
+    return Promise.reject(new Error(messages.notImplemented));
+  }
+
+  updateEntry(request: SaveRequest) {
+    return Promise.reject(new Error(messages.notImplemented));
+  }
 }

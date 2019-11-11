@@ -12,6 +12,7 @@ import {
   SaveResponse,
 } from '../../api';
 import { messages, repositoryRequestValidator, repositoryKeyRequestValidator } from '../../utils';
+import { validateSaveEntryRequest } from '../../validators';
 
 export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationService<T> {
   constructor(private token: string) {
@@ -19,16 +20,16 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
       throw new Error(messages.tokenNotProvided);
     }
   }
-  
+
   private getRepository(repository: string) {
     const rawString = localStorage.getItem(`${this.token}.${repository}`);
-    
+
     if (!rawString) {
       return Promise.reject(
-        new Error(`Configuration repository ${repository} not found`)
+        new Error(messages.repositoryDoesNotExist(repository))
       );
     }
-  
+
     try {
       return Promise.resolve(JSON.parse(rawString));
     } catch (error) {
@@ -40,7 +41,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     if (repositoryRequestValidator(request)) {
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
-    
+
     return new Promise((resolve, reject) => {
       this.getRepository(request.repository).then(() => {
         reject(new Error(messages.repositoryAlreadyExists));
@@ -55,30 +56,30 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     if (repositoryRequestValidator(request)) {
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
-    
+
     return new Promise((resolve, reject) => {
       this.getRepository(request.repository).then((repository) => {
         if (request.key) {
           if (!repository.hasOwnProperty(request.key)) {
             reject(new Error(`Configuration repository key ${request.key} not found`));
           }
-  
+
           const { [request.key]: value, ...rest } = repository;
           localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify(rest));
         } else {
           localStorage.removeItem(`${this.token}.${request.repository}`);
         }
-        
+
         resolve({});
       }).catch(reject);
     });
   }
-  
+
   entries(request: EntriesRequest): Promise<EntriesResponse<T>> {
     if (repositoryRequestValidator(request)) {
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
-    
+
     return this.getRepository(request.repository).then(repository => ({
       entries: Object.keys(repository).map(key => ({ key, value: repository[key] }))
     }));
@@ -88,11 +89,11 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     if (repositoryRequestValidator(request)) {
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
-    
+
     if (repositoryKeyRequestValidator(request)) {
       return Promise.reject(new Error(messages.repositoryKeyNotProvided));
     }
-    
+
     return new Promise((resolve, reject) => {
       this.getRepository(request.repository).then(repository =>
         Object.keys(repository).indexOf(request.key) >= 0
@@ -106,20 +107,51 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     if (repositoryRequestValidator(request)) {
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
-  
+
     if (repositoryKeyRequestValidator(request)) {
       return Promise.reject(new Error(messages.repositoryKeyNotProvided));
     }
-    
+
     return new Promise((resolve, reject) => {
       this.getRepository(request.repository).then((repository) => {
-        localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({
-          ...repository,
-          [request.key]: request.value
-        }));
-        
+        this.updateRepositoryData(request, repository);
         resolve({});
       }).catch(reject);
     });
+  }
+
+  public createEntry(request: SaveRequest<T>) {
+    return this.changeEntry(request, 'create');
+  };
+
+  public updateEntry(request: SaveRequest<T>) {
+    return this.changeEntry(request, 'update');
+  };
+
+  private changeEntry(request: SaveRequest<T>, mode: 'create' | 'update') {
+    try {
+      validateSaveEntryRequest(request);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+
+    return this.getRepository(request.repository)
+      .then(repositoryData => {
+        if (mode === 'create' && repositoryData.hasOwnProperty(request.key)) {
+          throw new Error(messages.entryAlreadyExist(request.key));
+        }
+        if (mode === 'update' && !repositoryData.hasOwnProperty(request.key)) {
+          throw new Error(messages.entryDoesNotExist(request.key));
+        }
+        return this.updateRepositoryData(request, repositoryData);
+      })
+  };
+
+  private updateRepositoryData = (request: SaveRequest<T>, repositoryData: object) => {
+    localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({
+      ...repositoryData,
+      [request.key]: request.value
+    }));
+    return {};
   }
 }

@@ -1,8 +1,8 @@
 import {AxiosDispatcher} from '@capsulajs/capsulajs-transport-providers';
-import {ConfigurationServiceScalecube} from '../../src/provider/Scalecube/ConfigurationServiceScalecube';
+import {ConfigurationServiceScalecube} from '../../src';
 import {messages} from '../../src';
 import {getRepositoryKeyNotFoundErrorMessage, getRepositoryNotFoundErrorMessage} from '../../src/utils';
-import {runTestsRejectedError} from '../utils';
+import { invalidValues, invalidValuesForString, runTestsRejectedError } from '../utils';
 
 const token = 'token';
 const emptyToken = '';
@@ -12,6 +12,9 @@ const dispatcher = new AxiosDispatcher(`${token}`);
 const mockedCallback = jest.fn();
 dispatcher.dispatch = mockedCallback;
 const configService = new ConfigurationServiceScalecube(token, dispatcher);
+const value = {
+  envName: 'New Env'
+};
 
 interface RemoteConfigurationServerError {
   errorCode: number;
@@ -78,5 +81,38 @@ describe('Errors tests for the ConfigurationServiceScalecube', () => {
     const exception: RemoteConfigurationServerError = {errorCode: 500, errorMessage: messages.repositoryAlreadyExists};
     mockedCallback.mockRejectedValueOnce(exception);
     return expect(configService.createRepository({repository})).rejects.toEqual(exception);
+  });
+
+  describe.each(['createEntry', 'updateEntry'])('Errors while the creation or updating of the entry', (methodName: 'createEntry' | 'updateEntry') => {
+    test.each(invalidValues)(
+      `Call ${methodName} with request, that is not an object, is rejected with an error (%s)`,
+      (invalidRequest) => {
+        expect.assertions(1);
+        return expect(configService[methodName](invalidRequest))
+          .rejects.toEqual(new Error(messages.invalidRequest));
+      });
+
+    test.each(invalidValuesForString)(
+      `Call ${methodName} with invalid repository is rejected with an error (%s)`,
+      (invalidRepository) => {
+        expect.assertions(1);
+        return expect(configService[methodName]({ repository: invalidRepository, key, value }))
+          .rejects.toEqual(new Error(messages.invalidRepository));
+      });
+
+    test.each(invalidValuesForString)(
+      `Call ${methodName} with invalid key is rejected with an error (%s)`,
+      (invalidKey) => {
+        expect.assertions(1);
+        return expect(configService[methodName]({ repository, key: invalidKey, value }))
+          .rejects.toEqual(new Error(messages.invalidKey));
+      });
+
+    it(`Call ${methodName} with a valid request and there is a server error - promise is rejected with an error`, () => {
+      expect.assertions(1);
+      const exception = { errorCode: 500, errorMessage: 'Server error' };
+      mockedCallback.mockRejectedValueOnce(exception);
+      return expect(configService[methodName]({ repository, key, value })).rejects.toEqual(exception);
+    });
   });
 });

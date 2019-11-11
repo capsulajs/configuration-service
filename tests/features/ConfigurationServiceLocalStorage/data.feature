@@ -37,3 +37,29 @@ Scenario: fetch() should return value by key
    And   an entry with key: X and value: Y is already saved
    When  user calls save method with key: X and value: Y and the name of this repository
    Then  the existing entry (key and the value) is rewritten and saved in the repository
+
+ Scenario:Call createEntry() with a new key should create a new entry
+   Given configurationServiceLocalStorage with createEntry method
+   And   an existing repository
+   And   an entry with key: X does not exist
+   When  user calls createEntry method with key: X and the following request
+        | <parameter> | <type>   |
+        | repository  | string   |
+        | value       | JsonNode |
+        | key         | string   |
+   And   key:X and value:Z
+   Then  the entry with key X is created with value Z
+   And   the promise that is returned from a method call resolves with an empty object
+
+  Scenario: Call updateEntry() with an existing key should update the relevant entry
+    Given configurationServiceLocalStorage with updateEntry method
+    And   an existing repository A
+    And   an entry with key: X and value: Y is already saved
+    When  user calls updateEntry method with key: X and the following request
+         | <parameter> | <type>   |
+         | repository  | string   |
+         | value       | JsonNode |
+         | key         | string   |
+    And   key:X and value:Z
+    Then  the entry with key X is updated with value Z
+    And   the promise that is returned from a method call resolves with an empty object

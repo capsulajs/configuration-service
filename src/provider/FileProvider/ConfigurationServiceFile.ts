@@ -69,4 +69,12 @@ export class ConfigurationServiceFile<T=any> implements ConfigurationService<T> 
   save(request: SaveRequest): Promise<SaveResponse> {
     return Promise.reject(new Error(messages.notImplemented));
   }
+
+  createEntry(request: SaveRequest) {
+    return Promise.reject(new Error(messages.notImplemented));
+  }
+
+  updateEntry(request: SaveRequest) {
+    return Promise.reject(new Error(messages.notImplemented));
+  }
 }
