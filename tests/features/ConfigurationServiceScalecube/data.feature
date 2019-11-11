@@ -68,7 +68,7 @@ Feature: Data tests for the ConfigurationServiceScalecube
     Given configurationServiceScalecube with createEntry method
     And   an existing repository A
     And   an entry with key: X does not exist
-    When  user calls create method with key: X and the following request
+    When  user calls createEntry method with key: X and the following request
          | <parameter> | <type>   |
          | repository  | string   |
          | value       | JsonNode |
@@ -82,7 +82,7 @@ Feature: Data tests for the ConfigurationServiceScalecube
     Given configurationServiceScalecube with updateEntry method
     And   an existing repository A
     And   an entry with key: X and value: Y is already saved
-    When  user calls save method with key: X and the following request
+    When  user calls updateEntry method with key: X and the following request
          | <parameter> | <type>   |
          | repository  | string   |
          | value       | JsonNode |
