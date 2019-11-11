@@ -104,25 +104,25 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
       return expect(configService[methodName]({ repository: wrongRepository, key, value }))
         .rejects.toEqual(new Error(messages.repositoryDoesNotExist(wrongRepository)));
     });
+  });
 
-    it('Call createEntry() for an existing entry should be rejected with an error', async () => {
-      expect.assertions(4);
-      await expect(configService.createRepository({ repository })).resolves.toEqual({ repository });
-      await expect(configService.createEntry({ repository, key, value })).resolves.toEqual({});
-      await expect(configService.createEntry({ repository, key, value: { value: 'new' } }))
-        .rejects.toEqual(new Error(messages.entryAlreadyExist(key)));
-      return expect(configService.entries({ repository }))
-        .resolves.toEqual({ entries: [{ key, value }] });
-    });
+  it('Call createEntry() for an existing entry should be rejected with an error', async () => {
+    expect.assertions(4);
+    await expect(configService.createRepository({ repository })).resolves.toEqual({ repository });
+    await expect(configService.createEntry({ repository, key, value })).resolves.toEqual({});
+    await expect(configService.createEntry({ repository, key, value: { value: 'new' } }))
+      .rejects.toEqual(new Error(messages.entryAlreadyExist(key)));
+    return expect(configService.entries({ repository }))
+      .resolves.toEqual({ entries: [{ key, value }] });
+  });
 
-    it('Call updateEntry() for a non-existing entry should be rejected with an error', async () => {
-      expect.assertions(3);
-      await expect(configService.createRepository({ repository })).resolves.toEqual({ repository });
-      await expect(configService.updateEntry({ repository, key, value }))
-        .rejects.toEqual(new Error(messages.entryDoesNotExist(key)));
-      return expect(configService.entries({ repository }))
-        .resolves.toEqual({ entries: [] });
-    });
+  it('Call updateEntry() for a non-existing entry should be rejected with an error', async () => {
+    expect.assertions(3);
+    await expect(configService.createRepository({ repository })).resolves.toEqual({ repository });
+    await expect(configService.updateEntry({ repository, key, value }))
+      .rejects.toEqual(new Error(messages.entryDoesNotExist(key)));
+    return expect(configService.entries({ repository }))
+      .resolves.toEqual({ entries: [] });
   });
 
 });
