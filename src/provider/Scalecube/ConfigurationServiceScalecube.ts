@@ -14,7 +14,7 @@ import {
   SaveResponse,
 } from '../../api';
 import {messages, repositoryKeyRequestValidator, repositoryRequestValidator} from '../../utils';
-import { isNonEmptyString, isObject } from '../../validators';
+import { isNonEmptyString, isObject, validateSaveEntryRequest } from '../../validators';
 
 const endpoint = '/configuration';
 
@@ -98,14 +98,10 @@ export class ConfigurationServiceScalecube<T = any> implements ConfigurationServ
   }
 
   private changeEntry = (request: SaveRequest<T>, mode: 'update' | 'create') => {
-    if (!isObject(request)) {
-      return Promise.reject(new Error(messages.invalidRequest));
-    }
-    if (!isNonEmptyString(request.key)) {
-      return Promise.reject(new Error(messages.invalidKey));
-    }
-    if (!isNonEmptyString(request.repository)) {
-      return Promise.reject(new Error(messages.invalidRepository));
+    try {
+      validateSaveEntryRequest(request);
+    } catch (error) {
+      return Promise.reject(error);
     }
 
     return this.dispatcher.dispatch(`${endpoint}/${mode}Entry`, this.prepRequest(request))

@@ -12,6 +12,7 @@ import {
   SaveResponse,
 } from '../../api';
 import { messages, repositoryRequestValidator, repositoryKeyRequestValidator } from '../../utils';
+import { validateSaveEntryRequest } from '../../validators';
 
 export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationService<T> {
   constructor(private token: string) {
@@ -25,7 +26,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
 
     if (!rawString) {
       return Promise.reject(
-        new Error(`Configuration repository ${repository} not found`)
+        new Error(messages.repositoryDoesNotExist(repository))
       );
     }
 
@@ -113,21 +114,44 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
 
     return new Promise((resolve, reject) => {
       this.getRepository(request.repository).then((repository) => {
-        localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({
-          ...repository,
-          [request.key]: request.value
-        }));
-
+        this.updateRepositoryData(request, repository);
         resolve({});
       }).catch(reject);
     });
   }
 
-  createEntry(request: SaveRequest) {
-    return Promise.reject(new Error(messages.notImplemented));
-  }
+  public createEntry(request: SaveRequest<T>) {
+    return this.changeEntry(request, 'create');
+  };
 
-  updateEntry(request: SaveRequest) {
-    return Promise.reject(new Error(messages.notImplemented));
+  public updateEntry(request: SaveRequest<T>) {
+    return this.changeEntry(request, 'update');
+  };
+
+  private changeEntry(request: SaveRequest<T>, mode: 'create' | 'update') {
+    try {
+      validateSaveEntryRequest(request);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+
+    return this.getRepository(request.repository)
+      .then(repositoryData => {
+        if (mode === 'create' && repositoryData.hasOwnProperty(request.key)) {
+          throw new Error(messages.entryAlreadyExist(request.key));
+        }
+        if (mode === 'update' && !repositoryData.hasOwnProperty(request.key)) {
+          throw new Error(messages.entryDoesNotExist(request.key));
+        }
+        return this.updateRepositoryData(request, repositoryData);
+      })
+  };
+
+  private updateRepositoryData = (request: SaveRequest<T>, repositoryData: object) => {
+    localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({
+      ...repositoryData,
+      [request.key]: request.value
+    }));
+    return {};
   }
 }

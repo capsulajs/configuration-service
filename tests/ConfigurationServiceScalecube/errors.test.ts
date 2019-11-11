@@ -1,5 +1,5 @@
 import {AxiosDispatcher} from '@capsulajs/capsulajs-transport-providers';
-import {ConfigurationServiceScalecube} from '../../src/provider/Scalecube/ConfigurationServiceScalecube';
+import {ConfigurationServiceScalecube} from '../../src';
 import {messages} from '../../src';
 import {getRepositoryKeyNotFoundErrorMessage, getRepositoryNotFoundErrorMessage} from '../../src/utils';
 import { invalidValues, invalidValuesForString, runTestsRejectedError } from '../utils';
