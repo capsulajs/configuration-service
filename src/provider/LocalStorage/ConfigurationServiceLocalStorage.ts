@@ -37,7 +37,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     }
   }
 
-  private getRepositorySync(repository: string) {
+  private getRepository(repository: string) {
     const rawString = localStorage.getItem(`${this.token}.${repository}`);
     if (!rawString) {
       throw new Error(messages.repositoryDoesNotExist(repository));
@@ -56,7 +56,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     }
 
     try {
-      this.getRepositorySync(request.repository);
+      this.getRepository(request.repository);
     } catch {
       this.setRepository(request.repository, {});
       return { repository: request.repository };
@@ -92,7 +92,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
 
-    const repository = this.getRepositorySync(request.repository);
+    const repository = this.getRepository(request.repository);
     return { entries: Object.keys(repository).map(key => ({ key, value: repository[key] }))};
   };
 
@@ -123,9 +123,9 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
       throw new Error(messages.repositoryKeyNotProvided);
     }
 
-    const repositoryData = this.getRepositorySync(request.repository);
+    const repositoryData = this.getRepository(request.repository);
     this.setRepository(request.repository, {
-      ...this.getRepositorySync(request.repository),
+      ...this.getRepository(request.repository),
       [request.key]: request.value
     });
     return {};
