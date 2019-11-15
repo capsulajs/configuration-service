@@ -5,6 +5,7 @@ const repository = 'Adele';
 const key = 'Hello';
 const value = 'It\'s me';
 const configService = new ConfigurationServiceLocalStorage(token);
+const arrayFixture = [{ key: '1', value: 1 }, { key: '2', value: 2 }, { key: '3', value: 3 }];
 
 describe('Test suite for the ConfigurationServiceLocalStorage', () => {
   beforeEach(localStorage.clear);
@@ -57,6 +58,18 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     expect(await configService.entries({ repository })).toEqual({ entries: [{ key, value }] });
     expect(await configService.save({ repository, key, value: 'Goodbye' })).toEqual({});
     expect(await configService.entries({ repository })).toEqual({ entries: [{ key, value: 'Goodbye' }] });
+  });
+
+  it('save() concurency check', async () => {
+    expect.assertions(3);
+    expect(await configService.createRepository({ repository })).toEqual({ repository });
+    expect(await Promise.all(arrayFixture.map(({ key, value }, id) => configService.save({
+      repository,
+      key,
+      value,
+    })))).toEqual([{}, {}, {}]);
+
+    expect(await configService.entries({ repository })).toEqual({ entries: arrayFixture });
   });
 
   it('Call createEntry() with a new key should create a new entry', async () => {
