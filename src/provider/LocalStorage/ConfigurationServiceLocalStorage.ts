@@ -135,26 +135,22 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     return this.changeEntry(request, 'update');
   };
 
-  private changeEntry(request: SaveRequest<T>, mode: 'create' | 'update') {
-    try {
-      validateSaveEntryRequest(request);
-    } catch (error) {
-      return Promise.reject(error);
+  private async changeEntry(request: SaveRequest<T>, mode: 'create' | 'update') {
+    validateSaveEntryRequest(request);
+    const repository = this.getRepository(request.repository);
+
+    if (mode === 'create' && repository.hasOwnProperty(request.key)) {
+      throw new Error(messages.entryAlreadyExist(request.key));
     }
 
-    return this.UNSAFE_getRepository(request.repository)
-      .then(repositoryData => {
-        if (mode === 'create' && repositoryData.hasOwnProperty(request.key)) {
-          throw new Error(messages.entryAlreadyExist(request.key));
-        }
-        if (mode === 'update' && !repositoryData.hasOwnProperty(request.key)) {
-          throw new Error(messages.entryDoesNotExist(request.key));
-        }
-        this.setRepository(request.repository, {
-          ...repositoryData,
-          [request.key]: request.value
-        });
-        return {};
-      })
+    if (mode === 'update' && !repository.hasOwnProperty(request.key)) {
+      throw new Error(messages.entryDoesNotExist(request.key));
+    }
+
+    this.setRepository(request.repository, {
+      ...repository,
+      [request.key]: request.value
+    });
+    return {};
   };
 }
