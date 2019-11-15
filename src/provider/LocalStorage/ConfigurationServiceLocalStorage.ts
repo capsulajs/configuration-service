@@ -64,27 +64,23 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     throw new Error(messages.repositoryAlreadyExists);
   }
 
-  delete(request: DeleteRequest): Promise<DeleteResponse> {
+  async delete(request: DeleteRequest): Promise<DeleteResponse> {
     if (repositoryRequestValidator(request)) {
-      return Promise.reject(new Error(messages.repositoryNotProvided));
+      throw new Error(messages.repositoryNotProvided);
     }
 
-    return new Promise((resolve, reject) => {
-      this.UNSAFE_getRepository(request.repository).then((repository) => {
-        if (request.key) {
-          if (!repository.hasOwnProperty(request.key)) {
-            reject(new Error(`Configuration repository key ${request.key} not found`));
-          }
+    const repository = this.getRepository(request.repository);
+    if (request.key && !repository.hasOwnProperty(request.key)) {
+        throw new Error(`Configuration repository key ${request.key} not found`);
+    }
 
-          const { [request.key]: value, ...rest } = repository;
-          this.setRepository(request.repository, rest);
-        } else {
-          localStorage.removeItem(`${this.token}.${request.repository}`);
-        }
-
-        resolve({});
-      }).catch(reject);
-    });
+    if (request.key) {
+      const { [request.key]: value, ...rest } = repository;
+      this.setRepository(request.repository, rest);
+    } else {
+      localStorage.removeItem(`${this.token}.${request.repository}`);
+    }
+    return {};
   }
 
   async entries(request: EntriesRequest): Promise<EntriesResponse<T>> {
