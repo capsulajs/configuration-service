@@ -50,19 +50,18 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     localStorage.setItem(`${this.token}.${repository}`, JSON.stringify(value));
   }
 
-  createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
+  async createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
     if (repositoryRequestValidator(request)) {
-      return Promise.reject(new Error(messages.repositoryNotProvided));
+      throw new Error(messages.repositoryNotProvided);
     }
 
-    return new Promise((resolve, reject) => {
-      this.getRepository(request.repository).then(() => {
-        reject(new Error(messages.repositoryAlreadyExists));
-      }).catch(() => {
-        this.setRepository(request.repository, {});
-        return resolve({ repository: request.repository });
-      });
-    });
+    try {
+      this.getRepositorySync(request.repository);
+    } catch {
+      this.setRepository(request.repository, {});
+      return { repository: request.repository };
+    }
+    throw new Error(messages.repositoryAlreadyExists);
   }
 
   delete(request: DeleteRequest): Promise<DeleteResponse> {
@@ -88,14 +87,13 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     });
   }
 
-  entries(request: EntriesRequest): Promise<EntriesResponse<T>> {
+  async entries(request: EntriesRequest): Promise<EntriesResponse<T>> {
     if (repositoryRequestValidator(request)) {
       return Promise.reject(new Error(messages.repositoryNotProvided));
     }
 
-    return this.getRepository(request.repository).then(repository => ({
-      entries: Object.keys(repository).map(key => ({ key, value: repository[key] }))
-    }));
+    const repository = this.getRepositorySync(request.repository);
+    return { entries: Object.keys(repository).map(key => ({ key, value: repository[key] }))};
   };
 
   fetch(request: FetchRequest): Promise<FetchResponse> {
