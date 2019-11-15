@@ -46,6 +46,10 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     return JSON.parse(rawString);
   }
 
+  private setRepository = (repository: string, value: object) => {
+    localStorage.setItem(`${this.token}.${repository}`, JSON.stringify(value));
+  }
+
   createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
     if (repositoryRequestValidator(request)) {
       return Promise.reject(new Error(messages.repositoryNotProvided));
@@ -55,7 +59,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
       this.getRepository(request.repository).then(() => {
         reject(new Error(messages.repositoryAlreadyExists));
       }).catch(() => {
-        localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({}));
+        this.setRepository(request.repository, {});
         return resolve({ repository: request.repository });
       });
     });
@@ -74,7 +78,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
           }
 
           const { [request.key]: value, ...rest } = repository;
-          localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify(rest));
+          this.setRepository(request.repository, rest);
         } else {
           localStorage.removeItem(`${this.token}.${request.repository}`);
         }
@@ -121,10 +125,11 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
       throw new Error(messages.repositoryKeyNotProvided);
     }
 
-    localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({
+    const repositoryData = this.getRepositorySync(request.repository);
+    this.setRepository(request.repository, {
       ...this.getRepositorySync(request.repository),
       [request.key]: request.value
-    }));
+    });
     return {};
   }
 
@@ -151,15 +156,11 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
         if (mode === 'update' && !repositoryData.hasOwnProperty(request.key)) {
           throw new Error(messages.entryDoesNotExist(request.key));
         }
-        return this.updateRepositoryData(request, repositoryData);
+        this.setRepository(request.repository, {
+          ...repositoryData,
+          [request.key]: request.value
+        });
+        return {};
       })
   };
-
-  private updateRepositoryData = (request: SaveRequest<T>, repositoryData: object) => {
-    localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({
-      ...repositoryData,
-      [request.key]: request.value
-    }));
-    return {};
-  }
 }
