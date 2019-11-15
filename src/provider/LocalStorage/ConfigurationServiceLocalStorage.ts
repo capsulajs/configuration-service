@@ -21,7 +21,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     }
   }
 
-  private getRepository(repository: string) {
+  private UNSAFE_getRepository(repository: string) {
     const rawString = localStorage.getItem(`${this.token}.${repository}`);
 
     if (!rawString) {
@@ -70,7 +70,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     }
 
     return new Promise((resolve, reject) => {
-      this.getRepository(request.repository).then((repository) => {
+      this.UNSAFE_getRepository(request.repository).then((repository) => {
         if (request.key) {
           if (!repository.hasOwnProperty(request.key)) {
             reject(new Error(`Configuration repository key ${request.key} not found`));
@@ -106,7 +106,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     }
 
     return new Promise((resolve, reject) => {
-      this.getRepository(request.repository).then(repository =>
+      this.UNSAFE_getRepository(request.repository).then(repository =>
         Object.keys(repository).indexOf(request.key) >= 0
           ? resolve({ key: request.key, value: repository[request.key] })
           : reject(new Error(`Configuration repository key ${request.key} not found`))
@@ -146,7 +146,7 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
       return Promise.reject(error);
     }
 
-    return this.getRepository(request.repository)
+    return this.UNSAFE_getRepository(request.repository)
       .then(repositoryData => {
         if (mode === 'create' && repositoryData.hasOwnProperty(request.key)) {
           throw new Error(messages.entryAlreadyExist(request.key));
