@@ -37,6 +37,15 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     }
   }
 
+  private getRepositorySync(repository: string) {
+    const rawString = localStorage.getItem(`${this.token}.${repository}`);
+    if (!rawString) {
+      throw new Error(messages.repositoryDoesNotExist(repository));
+    }
+
+    return JSON.parse(rawString);
+  }
+
   createRepository(request: CreateRepositoryRequest): Promise<CreateRepositoryResponse> {
     if (repositoryRequestValidator(request)) {
       return Promise.reject(new Error(messages.repositoryNotProvided));
@@ -103,21 +112,20 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     });
   }
 
-  save(request: SaveRequest): Promise<SaveResponse> {
+  async save(request: SaveRequest): Promise<SaveResponse> {
     if (repositoryRequestValidator(request)) {
-      return Promise.reject(new Error(messages.repositoryNotProvided));
+      throw new Error(messages.repositoryNotProvided);
     }
 
     if (repositoryKeyRequestValidator(request)) {
-      return Promise.reject(new Error(messages.repositoryKeyNotProvided));
+      throw new Error(messages.repositoryKeyNotProvided);
     }
 
-    return new Promise((resolve, reject) => {
-      this.getRepository(request.repository).then((repository) => {
-        this.updateRepositoryData(request, repository);
-        resolve({});
-      }).catch(reject);
-    });
+    localStorage.setItem(`${this.token}.${request.repository}`, JSON.stringify({
+      ...this.getRepositorySync(request.repository),
+      [request.key]: request.value
+    }));
+    return {};
   }
 
   public createEntry(request: SaveRequest<T>) {
