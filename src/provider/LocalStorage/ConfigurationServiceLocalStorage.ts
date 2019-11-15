@@ -21,22 +21,6 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     }
   }
 
-  private UNSAFE_getRepository(repository: string) {
-    const rawString = localStorage.getItem(`${this.token}.${repository}`);
-
-    if (!rawString) {
-      return Promise.reject(
-        new Error(messages.repositoryDoesNotExist(repository))
-      );
-    }
-
-    try {
-      return Promise.resolve(JSON.parse(rawString));
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  }
-
   private getRepository(repository: string) {
     const rawString = localStorage.getItem(`${this.token}.${repository}`);
     if (!rawString) {
