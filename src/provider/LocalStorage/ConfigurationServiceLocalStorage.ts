@@ -92,22 +92,22 @@ export class ConfigurationServiceLocalStorage<T=any> implements ConfigurationSer
     return { entries: Object.keys(repository).map(key => ({ key, value: repository[key] }))};
   };
 
-  fetch(request: FetchRequest): Promise<FetchResponse> {
+  async fetch(request: FetchRequest): Promise<FetchResponse> {
     if (repositoryRequestValidator(request)) {
-      return Promise.reject(new Error(messages.repositoryNotProvided));
+      throw new Error(messages.repositoryNotProvided);
     }
 
     if (repositoryKeyRequestValidator(request)) {
-      return Promise.reject(new Error(messages.repositoryKeyNotProvided));
+      throw new Error(messages.repositoryKeyNotProvided);
     }
 
-    return new Promise((resolve, reject) => {
-      this.UNSAFE_getRepository(request.repository).then(repository =>
-        Object.keys(repository).indexOf(request.key) >= 0
-          ? resolve({ key: request.key, value: repository[request.key] })
-          : reject(new Error(`Configuration repository key ${request.key} not found`))
-      ).catch(reject);
-    });
+    const repository = this.getRepository(request.repository)
+
+    if (Object.keys(repository).indexOf(request.key) >= 0) {
+      return { key: request.key, value: repository[request.key] };
+    }
+
+    throw new Error(`Configuration repository key ${request.key} not found`);
   }
 
   async save(request: SaveRequest): Promise<SaveResponse> {
