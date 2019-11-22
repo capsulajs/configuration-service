@@ -1,6 +1,6 @@
 {
   "name": "@capsulajs/capsulajs-configuration-service",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "Capsula-JS Configuration Service",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
