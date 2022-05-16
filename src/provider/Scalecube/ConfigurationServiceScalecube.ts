@@ -79,7 +79,7 @@ export class ConfigurationServiceScalecube<T = any> implements ConfigurationServ
     try {
       await createResult;
       return createResult;
-    } catch (exception) {
+    } catch (exception: any) {
       if (exception && exception.errorMessage === this.keyAlreadyExistsError(request.repository, request.key)) {
         return this.dispatcher.dispatch(`${endpoint}/updateEntry`, this.prepRequest(request));
       }

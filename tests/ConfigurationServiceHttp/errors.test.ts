@@ -11,13 +11,14 @@ const value = 'It\'s me';
 
 const mock = jest.fn();
 const configService = new ConfigurationServiceHttp(token);
+// @ts-ignore
 configService.dispatcher.dispatch = mock;
 
 describe('Test suite for the ConfigurationServiceHttp', () => {
 
   it('New instance of service should throw \'dispatcherNotProvided\' error', () => {
     expect.assertions(1);
-    return expect(() => new ConfigurationServiceHttp()).toThrow(new Error(messages.tokenNotProvided));
+    return expect(() => new ConfigurationServiceHttp("")).toThrow(new Error(messages.tokenNotProvided));
   });
 
   it('New instance should return \'repositoryNotProvided\' error', (done) => {

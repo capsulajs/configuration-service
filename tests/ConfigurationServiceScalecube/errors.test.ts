@@ -83,11 +83,13 @@ describe('Errors tests for the ConfigurationServiceScalecube', () => {
     return expect(configService.createRepository({repository})).rejects.toEqual(exception);
   });
 
+  // @ts-ignore
   describe.each(['createEntry', 'updateEntry'])('Errors while the creation or updating of the entry', (methodName: 'createEntry' | 'updateEntry') => {
     test.each(invalidValues)(
       `Call ${methodName} with request, that is not an object, is rejected with an error (%s)`,
       (invalidRequest) => {
         expect.assertions(1);
+        // @ts-ignore
         return expect(configService[methodName](invalidRequest))
           .rejects.toEqual(new Error(messages.invalidRequest));
       });
@@ -96,6 +98,7 @@ describe('Errors tests for the ConfigurationServiceScalecube', () => {
       `Call ${methodName} with invalid repository is rejected with an error (%s)`,
       (invalidRepository) => {
         expect.assertions(1);
+        // @ts-ignore
         return expect(configService[methodName]({ repository: invalidRepository, key, value }))
           .rejects.toEqual(new Error(messages.invalidRepository));
       });
@@ -104,6 +107,7 @@ describe('Errors tests for the ConfigurationServiceScalecube', () => {
       `Call ${methodName} with invalid key is rejected with an error (%s)`,
       (invalidKey) => {
         expect.assertions(1);
+        // @ts-ignore
         return expect(configService[methodName]({ repository, key: invalidKey, value }))
           .rejects.toEqual(new Error(messages.invalidKey));
       });

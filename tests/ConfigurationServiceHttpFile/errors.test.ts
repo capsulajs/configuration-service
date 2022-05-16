@@ -21,14 +21,17 @@ const configService = new ConfigurationServiceHttpFile(token);
 describe('Test suite for the ConfigurationServiceHttpFile', () => {
 
     it('New instance of service should throw \'tokenNotProvided\' error', async () => {
-        expect.assertions(6);
+        expect.assertions(5);
         // @ts-ignore
-        await expect(() => new ConfigurationServiceHttpFile({})).toThrow(new Error(messages.tokenNotProvided));
-        await expect(() => new ConfigurationServiceHttpFile({ disableCache: true })).toThrow(new Error(messages.tokenNotProvided));
-        await expect(() => new ConfigurationServiceHttpFile({ dummyField: true })).toThrow(new Error(messages.tokenNotProvided));
-        await expect(() => new ConfigurationServiceHttpFile({ token: '' })).toThrow(new Error(messages.tokenNotProvided));
-        await expect(() => new ConfigurationServiceHttpFile({ token: undefined })).toThrow(new Error(messages.tokenNotProvided));
-        return expect(() => new ConfigurationServiceHttpFile()).toThrow(new Error(messages.tokenNotProvided));
+        expect(() => new ConfigurationServiceHttpFile({})).toThrow(new Error(messages.tokenNotProvided));
+        // @ts-ignore
+        expect(() => new ConfigurationServiceHttpFile({ disableCache: true })).toThrow(new Error(messages.tokenNotProvided));
+        // @ts-ignore
+        expect(() => new ConfigurationServiceHttpFile({ dummyField: true })).toThrow(new Error(messages.tokenNotProvided));
+        // @ts-ignore
+        expect(() => new ConfigurationServiceHttpFile({ token: '' })).toThrow(new Error(messages.tokenNotProvided));
+        // @ts-ignore
+        return expect(() => new ConfigurationServiceHttpFile({ token: undefined })).toThrow(new Error(messages.tokenNotProvided));
     });
 
     it('New instance should return \'repositoryNotProvided\' error', (done) => {
