@@ -13,7 +13,7 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
 
   it('New instance of service should throw \'tokenNotProvided\' error', async () => {
     expect.assertions(1);
-    return expect(() => new ConfigurationServiceLocalStorage()).toThrow(new Error(messages.tokenNotProvided));
+    return expect(() => new ConfigurationServiceLocalStorage("")).toThrow(new Error(messages.tokenNotProvided));
   });
 
   it('New instance should return \'repositoryNotProvided\' error', (done) => {
@@ -42,9 +42,9 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     );
   });
 
-  it('Call fetch() and save() return \'repositoryKeyNotProvided\' error', async (done) => {
-    await configService.createRepository({ repository });
-    runTestsRejectedError(expect, done)(
+  it('Call fetch() and save() return \'repositoryKeyNotProvided\' error', (done) => {
+    configService.createRepository({ repository });
+    return runTestsRejectedError(expect, done)(
       configService,
       ['fetch', 'save'],
       { repository },
@@ -52,9 +52,9 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     );
   });
 
-  it('Call delete(), fetch() return \'repository key not found\' error', async (done) => {
-    await configService.createRepository({ repository });
-    runTestsRejectedError(expect, done)(
+  it('Call delete(), fetch() return \'repository key not found\' error', (done) => {
+    configService.createRepository({ repository });
+    return runTestsRejectedError(expect, done)(
       configService,
       ['delete', 'fetch'],
       { repository, key },
@@ -73,11 +73,13 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
     );
   });
 
+  // @ts-ignore
   describe.each(['createEntry', 'updateEntry'])('Errors while the creation or updating of the entry', (methodName: 'createEntry' | 'updateEntry') => {
     test.each(invalidValues)(
       `Call ${methodName} with request, that is not an object, is rejected with an error (%s)`,
       (invalidRequest) => {
         expect.assertions(1);
+        // @ts-ignore
         return expect(configService[methodName](invalidRequest))
           .rejects.toEqual(new Error(messages.invalidRequest));
       });
@@ -86,6 +88,7 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
       `Call ${methodName} with invalid repository is rejected with an error (%s)`,
       (invalidRepository) => {
         expect.assertions(1);
+        // @ts-ignore
         return expect(configService[methodName]({ repository: invalidRepository, key, value }))
           .rejects.toEqual(new Error(messages.invalidRepository));
       });
@@ -94,6 +97,7 @@ describe('Test suite for the ConfigurationServiceLocalStorage', () => {
       `Call ${methodName} with invalid key is rejected with an error (%s)`,
       (invalidKey) => {
         expect.assertions(1);
+        // @ts-ignore
         return expect(configService[methodName]({ repository, key: invalidKey, value }))
           .rejects.toEqual(new Error(messages.invalidKey));
       });

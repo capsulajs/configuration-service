@@ -11,6 +11,7 @@ const data = {
 
 const mock = jest.fn();
 const configService = new ConfigurationServiceHttp(token);
+// @ts-ignore
 configService.dispatcher.dispatch = mock;
 
 describe('Test suite for the ConfigurationServiceHttp', () => {

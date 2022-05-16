@@ -1,6 +1,6 @@
 import * as utils from '../src/utils';
 
-export const expectWithFailNow = (expect, done) => {
+export const expectWithFailNow = (expect: any, done: any) => {
   try {
     expect();
   } catch (error) {
@@ -9,25 +9,25 @@ export const expectWithFailNow = (expect, done) => {
 };
 
 export const runTestsRejectedError = (
-  expect,
-  done
+  expect: any,
+  done: any
 ) => (
-  service,
-  methods,
-  request,
-  response,
-  beforeEach = null
+  service: any,
+  methods: any,
+  request: any,
+  response: any,
+  beforeEach: any = null
 ) => {
   expect.assertions(methods.length);
 
-  methods.forEach((method, index) => {
+  methods.forEach((method: any, index: number) => {
     if (beforeEach) {
       beforeEach();
     }
 
     service[method](request)
       .then(() => done.fail(new Error('Resolved without an error')))
-      .catch((error) => {
+      .catch((error: any) => {
         expectWithFailNow(() => expect(error).toEqual(response), done);
 
         if (index === methods.length - 1) {
